@@ -359,3 +359,8 @@ export default {
   }
 };
 </script>
+<style>
+  .el-form-item__content {
+    margin-right: 15px;
+  }
+</style>

@@ -21,6 +21,15 @@
             </el-form-item>
           </el-col>
           <el-col :md="12" :sm="24">
+						<el-form-item label="Peso (KG)" prop="weigh">
+							<el-input-number
+								v-model="form.weigh"
+								:disabled="loading"
+								controls-position="right"								
+							></el-input-number>
+						</el-form-item>
+					</el-col>
+          <el-col :md="12" :sm="24">
             <el-form-item label="Preço" prop="price">
               <money v-model="form.price" :disabled="loading" class="el-input__inner"></money>
             </el-form-item>
@@ -468,12 +477,13 @@ export default {
         product_category_id: null,
         title: null,
         price: 0,
-        cfop: null,
-        ucom: null,
-        csosn: null,
-        ipi_ipint_cst: null,
-        pis_ipint_cst: null,
-        cofins_cofinsnt_cst: null,
+        weigh: 0,
+        cfop: '5101',
+        ucom: 'PC',
+        csosn: '103',
+        ipi_ipint_cst: '53',
+        pis_ipint_cst: '07',
+        cofins_cofinsnt_cst: '07',
       },
       rules: {
         company_id: [
@@ -497,9 +507,16 @@ export default {
         price: [
           {
             required: true,
-            message: "Campo obrigatório"
+            message: "Campo obrigatório",            
           }
         ],
+        weigh: [
+          {
+            required: true,
+            message: "Campo obrigatório",            
+          }
+        ],
+        
         cfop: [
           {
             required: true,

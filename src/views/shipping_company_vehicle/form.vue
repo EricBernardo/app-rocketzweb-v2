@@ -1,58 +1,60 @@
 <template>
 	<div class="app-container">
-		<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
-			<el-row :gutter="10">
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Empresa" prop="company_id" v-if="profile.role=='root'">
-						<el-select filterable v-model="company_id" @change="setShippingCompany()" :disabled="loading">
-							<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Transportadora" prop="shipping_company_id">
-						<el-select
-							filterable
-							v-model="form.shipping_company_id"
-							:disabled="loading || !this.shipping_companies.length"
-						>
-							<el-option
-								v-for="item in shipping_companies"
-								:key="item.id"
-								:label="item.title"
-								:value="item.id"
-							></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Placa" prop="board">
-						<el-input v-model="form.board" :disabled="loading" :maxlength="7"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Estado" prop="state_id">
-						<el-select filterable v-model="form.state_id" :disabled="loading">
-							<el-option v-for="item in states" :key="item.id" :label="item.name" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="24" :sm="24">
-					<el-form-item>
-						<router-link to="/shipping_company_vehicle" class="pull-left">
-							<el-button size="mini">Voltar</el-button>
-						</router-link>
-						<el-button
-							size="mini"
-							:loading="loading"
-							type="primary"
-							class="pull-right"
-							@click="onSubmit('form')"
-						>Salvar</el-button>
-					</el-form-item>
-				</el-col>
-			</el-row>
-		</el-form>
+		<el-card>
+			<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
+				<el-row :gutter="10">
+					<el-col :md="12" :sm="24">
+						<el-form-item label="Empresa" prop="company_id" v-if="profile.role=='root'">
+							<el-select filterable v-model="company_id" @change="setShippingCompany()" :disabled="loading">
+								<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="Transportadora" prop="shipping_company_id">
+							<el-select
+								filterable
+								v-model="form.shipping_company_id"
+								:disabled="loading || !this.shipping_companies.length"
+							>
+								<el-option
+									v-for="item in shipping_companies"
+									:key="item.id"
+									:label="item.title"
+									:value="item.id"
+								></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="Placa" prop="board">
+							<el-input v-model="form.board" :disabled="loading" :maxlength="7"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="Estado" prop="state_id">
+							<el-select filterable v-model="form.state_id" :disabled="loading">
+								<el-option v-for="item in states" :key="item.id" :label="item.name" :value="item.id"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :md="24" :sm="24">
+						<el-form-item>
+							<router-link to="/shipping_company_vehicle" class="pull-left">
+								<el-button size="mini">Voltar</el-button>
+							</router-link>
+							<el-button
+								size="mini"
+								:loading="loading"
+								type="primary"
+								class="pull-right"
+								@click="onSubmit('form')"
+							>Salvar</el-button>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+		</el-card>
 	</div>
 </template>
 

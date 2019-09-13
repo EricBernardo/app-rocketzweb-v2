@@ -1,69 +1,71 @@
 <template>
 	<div class="app-container">
-		<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
-			<el-row :gutter="10">
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Empresa" prop="company_id" v-if="profile.role=='root'">
-						<el-select filterable v-model="form.company_id" :disabled="loading">
-							<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Título" prop="title">
-						<el-input v-model="form.title" :disabled="loading"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="CPF" prop="cpf" v-mask="'###.###.###-##'">
-						<el-input v-model="form.cpf" :disabled="loading"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Estado" prop="state_id">
-						<el-select
-							filterable
-							v-model="form.state_id"
-							@change="getCities(true)"
-							:disabled="loading || loading_cities"
-						>
-							<el-option v-for="item in states" :key="item.id" :label="item.name" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Cidade" prop="city_id">
-						<el-select filterable v-model="form.city_id" :disabled="loading || loading_cities">
-							<el-option v-for="item in cities" :key="item.id" :label="item.name" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Endereço" prop="address">
-						<el-input v-model="form.address" :disabled="loading"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="IE" prop="ie">
-						<el-input v-model="form.ie" :disabled="loading"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :md="24" :sm="24">
-					<el-form-item>
-						<router-link to="/shipping_company" class="pull-left">
-							<el-button size="mini">Voltar</el-button>
-						</router-link>
-						<el-button
-							size="mini"
-							:loading="loading"
-							type="primary"
-							class="pull-right"
-							@click="onSubmit('form')"
-						>Salvar</el-button>
-					</el-form-item>
-				</el-col>
-			</el-row>
-		</el-form>
+		<el-card>
+			<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
+				<el-row :gutter="10">
+					<el-col :md="12" :sm="24">
+						<el-form-item label="Empresa" prop="company_id" v-if="profile.role=='root'">
+							<el-select filterable v-model="form.company_id" :disabled="loading">
+								<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="Título" prop="title">
+							<el-input v-model="form.title" :disabled="loading"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="CPF" prop="cpf" v-mask="'###.###.###-##'">
+							<el-input v-model="form.cpf" :disabled="loading"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="Estado" prop="state_id">
+							<el-select
+								filterable
+								v-model="form.state_id"
+								@change="getCities(true)"
+								:disabled="loading || loading_cities"
+							>
+								<el-option v-for="item in states" :key="item.id" :label="item.name" :value="item.id"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="Cidade" prop="city_id">
+							<el-select filterable v-model="form.city_id" :disabled="loading || loading_cities">
+								<el-option v-for="item in cities" :key="item.id" :label="item.name" :value="item.id"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="Endereço" prop="address">
+							<el-input v-model="form.address" :disabled="loading"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="IE" prop="ie">
+							<el-input v-model="form.ie" :disabled="loading"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :md="24" :sm="24">
+						<el-form-item>
+							<router-link to="/shipping_company" class="pull-left">
+								<el-button size="mini">Voltar</el-button>
+							</router-link>
+							<el-button
+								size="mini"
+								:loading="loading"
+								type="primary"
+								class="pull-right"
+								@click="onSubmit('form')"
+							>Salvar</el-button>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+		</el-card>
 	</div>
 </template>
 

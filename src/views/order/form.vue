@@ -1,156 +1,158 @@
 <template>
   <div class="app-container">
-    <el-button
-      type="success"
-      class="pull-right m-b-10"
-      size="mini"
-      @click="addProduct()"
-      :disabled="!this.products.length"
-    >Adicionar produto</el-button>
-    <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
-      <el-col :md="6" :sm="24">
-        <el-form-item
-          class="order-company"
-          label="Empresas"
-          prop="company_id"
-          v-if="companies.length"
-        >
-          <el-select
-            v-model="form.company_id"
-            :disabled="loading"
-            filterable
-            @change="setClientsCompanies()"
+    <el-card>
+      <el-button
+        type="success"
+        class="pull-right m-b-10"
+        size="mini"
+        @click="addProduct()"
+        :disabled="!this.products.length"
+      >Adicionar produto</el-button>
+      <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
+        <el-col :md="6" :sm="24">
+          <el-form-item
+            class="order-company"
+            label="Empresas"
+            prop="company_id"
+            v-if="companies.length"
           >
-            <el-option
-              v-for="item in companies"
-              :key="item.id"
-              :label="item.title"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :md="6" :sm="24">
-        <el-form-item
-          label="Cliente"
-          prop="client_id"
-          v-if="this.profile.role == 'root' || this.profile.role == 'administrator'"
-        >
-          <el-select
-            v-model="form.client_id"
-            :disabled="loading || !this.clients.length"
-            filterable
-          >
-            <el-option
-              v-for="item in clients"
-              :key="item.id"
-              :label="item.title"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="24">
-        <el-table
-          :data="form.products"
-          row-key="id"
-          element-loading-text="Carregando..."
-          border
-          width="100%"
-        >
-          <el-table-column label="Produto" min-width="150">
-            <template slot-scope="scope">
-              <el-select
-                v-model="scope.row.product_id"
-                @change="calculateProduct(scope.row)"
-                filterable
-                :disabled="scope.row.block"
-              >
-                <el-option
-                  v-for="item in products"
-                  :key="item.id"
-                  :label="(item.title.indexOf(item.category.title) === -1 ? (item.category.title + ' - ') : '') + item.title"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column label="Quantidade" min-width="150">
-            <template slot-scope="scope">
-              <el-input-number
-                v-model="scope.row.quantity"
-                :change="calculateProduct(scope.row)"
-                :min="1"
-                :max="100"
-                :disabled="scope.row.block"
-              ></el-input-number>
-            </template>
-          </el-table-column>
-          <el-table-column label="Preço" min-width="150">
-            <template slot-scope="scope">
-              <money
-                v-model="scope.row.total"
-                :disabled="scope.row.block"
-                :readonly="true"
-                class="el-input__inner"
-              ></money>
-            </template>
-          </el-table-column>
-          <el-table-column label="-" width="120" fixed="right">
-            <template slot-scope="scope">
-              <el-button type="danger" size="mini" @click="removeProduct(scope.row)">Remover</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-      <el-col :md="6" :sm="24">
-        <el-form-item label="Desconto" prop="discount">
-          <el-col :md="20" :sm="24">
-            <money v-model="form.discount" :disabled="loading" class="el-input__inner"></money>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="Pago?" prop="paid">
-          <el-switch v-model="form.paid" :disabled="loading"></el-switch>
-        </el-form-item>
-        <el-form-item label="Data" prop="date">
-          <el-date-picker
-            :disabled="loading"
-            format="dd/MM/yyyy"
-            value-format="yyyy-MM-dd"
-            v-model="form.date"
-            type="date"
-            placeholder="Data"
-          ></el-date-picker>
-        </el-form-item>
-      </el-col>
-      <el-col :md="6" :sm="24" class="pull-right">
-        <el-form-item label="Subtotal" prop="subtotal">
-          <money v-model="form.subtotal" :readonly="true" class="el-input__inner"></money>
-        </el-form-item>
-        <el-form-item label="Total" prop="total">
-          <money v-model="form.total" :readonly="true" class="el-input__inner"></money>
-        </el-form-item>
-      </el-col>
-      <el-col :md="24" :sm="24">
-        <el-form-item label="Observação" prop="observation">
-          <el-input type="textarea" v-model="form.observation" :disabled="loading" :rows="5"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :md="24" :sm="24">
-          <el-form-item>
-            <router-link :to="{ name: 'order' }" class="pull-left">
-              <el-button size="mini">Voltar</el-button>
-            </router-link>
-            <el-button
-              size="mini"
-              :loading="loading"
-              type="primary"
-              class="pull-right"
-              @click="onSubmit('form')"
-            >Salvar</el-button>
+            <el-select
+              v-model="form.company_id"
+              :disabled="loading"
+              filterable
+              @change="setClientsCompanies()"
+            >
+              <el-option
+                v-for="item in companies"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
-    </el-form>
+        <el-col :md="6" :sm="24">
+          <el-form-item
+            label="Cliente"
+            prop="client_id"
+            v-if="this.profile.role == 'root' || this.profile.role == 'administrator'"
+          >
+            <el-select
+              v-model="form.client_id"
+              :disabled="loading || !this.clients.length"
+              filterable
+            >
+              <el-option
+                v-for="item in clients"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-table
+            :data="form.products"
+            row-key="id"
+            element-loading-text="Carregando..."
+            border
+            width="100%"
+          >
+            <el-table-column label="Produto" min-width="150">
+              <template slot-scope="scope">
+                <el-select
+                  v-model="scope.row.product_id"
+                  @change="calculateProduct(scope.row)"
+                  filterable
+                  :disabled="scope.row.block"
+                >
+                  <el-option
+                    v-for="item in products"
+                    :key="item.id"
+                    :label="(item.title.indexOf(item.category.title) === -1 ? (item.category.title + ' - ') : '') + item.title"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="Quantidade" min-width="150">
+              <template slot-scope="scope">
+                <el-input-number
+                  v-model="scope.row.quantity"
+                  :change="calculateProduct(scope.row)"
+                  :min="1"
+                  :max="100"
+                  :disabled="scope.row.block"
+                ></el-input-number>
+              </template>
+            </el-table-column>
+            <el-table-column label="Preço" min-width="150">
+              <template slot-scope="scope">
+                <money
+                  v-model="scope.row.total"
+                  :disabled="scope.row.block"
+                  :readonly="true"
+                  class="el-input__inner"
+                ></money>
+              </template>
+            </el-table-column>
+            <el-table-column label="-" width="120" fixed="right">
+              <template slot-scope="scope">
+                <el-button type="danger" size="mini" @click="removeProduct(scope.row)">Remover</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :md="6" :sm="24">
+          <el-form-item label="Desconto" prop="discount">
+            <el-col :md="20" :sm="24">
+              <money v-model="form.discount" :disabled="loading" class="el-input__inner"></money>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="Pago?" prop="paid">
+            <el-switch v-model="form.paid" :disabled="loading"></el-switch>
+          </el-form-item>
+          <el-form-item label="Data" prop="date">
+            <el-date-picker
+              :disabled="loading"
+              format="dd/MM/yyyy"
+              value-format="yyyy-MM-dd"
+              v-model="form.date"
+              type="date"
+              placeholder="Data"
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :md="6" :sm="24" class="pull-right">
+          <el-form-item label="Subtotal" prop="subtotal">
+            <money v-model="form.subtotal" :readonly="true" class="el-input__inner"></money>
+          </el-form-item>
+          <el-form-item label="Total" prop="total">
+            <money v-model="form.total" :readonly="true" class="el-input__inner"></money>
+          </el-form-item>
+        </el-col>
+        <el-col :md="24" :sm="24">
+          <el-form-item label="Observação" prop="observation">
+            <el-input type="textarea" v-model="form.observation" :disabled="loading" :rows="5"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :md="24" :sm="24">
+            <el-form-item>
+              <router-link :to="{ name: 'order' }" class="pull-left">
+                <el-button size="mini">Voltar</el-button>
+              </router-link>
+              <el-button
+                size="mini"
+                :loading="loading"
+                type="primary"
+                class="pull-right"
+                @click="onSubmit('form')"
+              >Salvar</el-button>
+            </el-form-item>
+          </el-col>
+      </el-form>
+    </el-card>
   </div>
 </template>
 

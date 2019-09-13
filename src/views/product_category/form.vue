@@ -1,37 +1,39 @@
 <template>
 	<div class="app-container">
-		<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
-			<el-form-item label="Empresa" prop="company_id" v-if="profile.role=='root'">
-				<el-select filterable v-model="form.company_id" :disabled="loading">
-					<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="CFOP (Código Fiscal de Operações e de Prestações)" prop="cfop">
-				<el-select filterable v-model="form.cfop" :disabled="loading">
-					<el-option v-for="item in cfops" :key="item.id" :label="item.title" :value="item.id"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="Unidade de medida comercial" prop="cfop">
-				<el-select filterable v-model="form.business_unit" :disabled="loading">
-					<el-option v-for="item in business_units" :key="item.id" :label="item.title" :value="item.id"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item label="Título" prop="title">
-				<el-input v-model="form.title" :disabled="loading"></el-input>
-			</el-form-item>
-			<el-form-item>
-				<router-link :to="{ name: 'product_category' }" class="pull-left">
-					<el-button size="mini">Voltar</el-button>
-				</router-link>
-				<el-button
-					size="mini"
-					:loading="loading"
-					type="primary"
-					class="pull-right"
-					@click="onSubmit('form')"
-				>Salvar</el-button>
-			</el-form-item>
-		</el-form>
+		<el-card>
+			<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
+				<el-form-item label="Empresa" prop="company_id" v-if="profile.role=='root'">
+					<el-select filterable v-model="form.company_id" :disabled="loading">
+						<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="CFOP (Código Fiscal de Operações e de Prestações)" prop="cfop">
+					<el-select filterable v-model="form.cfop" :disabled="loading">
+						<el-option v-for="item in cfops" :key="item.id" :label="item.title" :value="item.id"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="Unidade de medida comercial" prop="cfop">
+					<el-select filterable v-model="form.business_unit" :disabled="loading">
+						<el-option v-for="item in business_units" :key="item.id" :label="item.title" :value="item.id"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="Título" prop="title">
+					<el-input v-model="form.title" :disabled="loading"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<router-link :to="{ name: 'product_category' }" class="pull-left">
+						<el-button size="mini">Voltar</el-button>
+					</router-link>
+					<el-button
+						size="mini"
+						:loading="loading"
+						type="primary"
+						class="pull-right"
+						@click="onSubmit('form')"
+					>Salvar</el-button>
+				</el-form-item>
+			</el-form>
+		</el-card>
 	</div>
 </template>
 

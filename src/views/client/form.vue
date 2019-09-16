@@ -344,3 +344,8 @@
 		}
 	};
 </script>
+<style>
+	.el-card {
+		margin-bottom: 15px;
+	}
+</style>

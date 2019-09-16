@@ -3,6 +3,10 @@
     <el-card>
       <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
         <el-row :gutter="10">
+          <el-card>
+					<div slot="header" class="clearfix">
+						<span>Informações</span>
+					</div>
           <el-col :md="12" :sm="24">
             <el-form-item label="Categoria" prop="product_category_id">
               <el-select v-model="form.product_category_id" :disabled="loading" filterable>
@@ -25,7 +29,7 @@
 							<el-input-number
 								v-model="form.weigh"
 								:disabled="loading"
-								controls-position="right"								
+								controls-position="right"
 							></el-input-number>
 						</el-form-item>
 					</el-col>
@@ -34,13 +38,18 @@
               <money v-model="form.price" :disabled="loading" class="el-input__inner"></money>
             </el-form-item>
           </el-col>
+          </el-card>
+          <el-card>
+					<div slot="header" class="clearfix">
+						<span>Informações adicionais</span>
+					</div>
           <el-col :md="12" :sm="24">
             <el-form-item label="CFOP (Código Fiscal de Operações e de Prestações)" prop="cfop">
               <el-select filterable v-model="form.cfop" :disabled="loading">
                 <el-option v-for="item in cfops" :key="item.id" :label="item.title" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
-          </el-col>            
+          </el-col>
           <el-col :md="12" :sm="24">
             <el-form-item label="Unidade de medida comercial" prop="ucom">
               <el-select filterable v-model="form.ucom" :disabled="loading">
@@ -90,6 +99,7 @@
               >Salvar</el-button>
             </el-form-item>
           </el-col>
+          </el-card>
         </el-row>
       </el-form>
     </el-card>
@@ -106,7 +116,7 @@ export default {
     return {
       loading: false,
       companies: [],
-      categories: [],      
+      categories: [],
       pis_cofins_csts: [
         {
           id: '01',
@@ -226,7 +236,7 @@ export default {
           id: '5101',
           title: "Venda de produção do estabelecimento"
         }
-      ],     
+      ],
       ucoms: [
         {
           id: "AMPOLA",
@@ -507,16 +517,16 @@ export default {
         price: [
           {
             required: true,
-            message: "Campo obrigatório",            
+            message: "Campo obrigatório",
           }
         ],
         weigh: [
           {
             required: true,
-            message: "Campo obrigatório",            
+            message: "Campo obrigatório",
           }
         ],
-        
+
         cfop: [
           {
             required: true,

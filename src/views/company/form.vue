@@ -1,8 +1,11 @@
 <template>
 	<div class="app-container">
-		<el-card>
-			<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
-				<el-row :gutter="10">
+		<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
+			<el-row :gutter="10">
+				<el-card>
+					<div slot="header" class="clearfix">
+						<span>Informações</span>
+					</div>
 					<el-col :md="12" :sm="24">
 						<el-form-item label="Título" prop="title">
 							<el-input v-model="form.title" :disabled="loading"></el-input>
@@ -84,8 +87,13 @@
 							></el-input-number>
 						</el-form-item>
 					</el-col>
+				</el-card>
+				<el-card>
+					<div slot="header" class="clearfix">
+						<span>Certificando NFE</span>
+					</div>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="Certificado (.PFX)" prop="cert_file">
+						<el-form-item label="Arquivo (.PFX)" prop="cert_file">
 							<el-upload
 								class="cert_file"
 								:action="`${base_api}/company/file`"
@@ -104,8 +112,71 @@
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="Senha" prop="cert_password">
+						<el-form-item label="Senha do arquivo" prop="cert_password">
 							<el-input v-model="form.cert_password" :disabled="loading"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-card>
+				<el-card>
+					<div slot="header" class="clearfix">
+						<span>Impostos (%)</span>
+					</div>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="IRPJ (Imposto de Renda de Pessoa Jurídica​)" prop="irpj">
+							<el-input-number
+								v-model="form.irpj"
+								:disabled="loading"
+								controls-position="right"
+								:min="0"
+								:max="100"
+							></el-input-number>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item
+							label="COFINS (Contribuição pa​ra Financiamento de Seguridade Social)"
+							prop="cofins"
+						>
+							<el-input-number
+								v-model="form.cofins"
+								:disabled="loading"
+								controls-position="right"
+								:min="0"
+								:max="100"
+							></el-input-number>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="PIS (Programa de Integração Social)" prop="pis">
+							<el-input-number
+								v-model="form.pis"
+								:disabled="loading"
+								controls-position="right"
+								:min="0"
+								:max="100"
+							></el-input-number>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="CSLL (Contribuição Social sobre Lucro Líquido)" prop="csll">
+							<el-input-number
+								v-model="form.csll"
+								:disabled="loading"
+								controls-position="right"
+								:min="0"
+								:max="100"
+							></el-input-number>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="ISS (Imposto sobre Serviço de Qualquer Natureza)" prop="iss">
+							<el-input-number
+								v-model="form.iss"
+								:disabled="loading"
+								controls-position="right"
+								:min="0"
+								:max="100"
+							></el-input-number>
 						</el-form-item>
 					</el-col>
 					<el-col :md="24" :sm="24">
@@ -122,9 +193,9 @@
 							>Salvar</el-button>
 						</el-form-item>
 					</el-col>
-				</el-row>
-			</el-form>
-		</el-card>
+				</el-card>
+			</el-row>
+		</el-form>
 	</div>
 </template>
 
@@ -175,7 +246,12 @@
 					neighborhood: null,
 					state_id: null,
 					city_id: null,
-					cep: null
+					cep: null,
+					irpj: 0,
+					cofins: 0,
+					pis: 0,
+					csll: 0,
+					iss: 0
 				},
 				rules: {
 					title: [
@@ -239,6 +315,36 @@
 						}
 					],
 					cep: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					irpj: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					cofins: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					pis: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					csll: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					iss: [
 						{
 							required: true,
 							message: "Campo obrigatório"
@@ -402,5 +508,8 @@
 	}
 	.el-radio {
 		margin-top: 5px;
+	}
+	.el-card {
+		margin-bottom: 15px;
 	}
 </style>

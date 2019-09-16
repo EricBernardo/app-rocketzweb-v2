@@ -330,17 +330,17 @@
 			},
 			setClientsCompanyVehicles(clear = false) {
 				this.shipping_company_vehicles = [];
-
 				if (clear) {
 					this.form.shipping_company_vehicle_id = null;
 				}
-
-				getAllShippingCompanyVehicle({
-					company_id: this.form.company_id,
-					shipping_company_id: this.form.shipping_company_id
-				}).then(response => {
-					this.shipping_company_vehicles = response.data.data;
-				});
+				if (this.form.shipping_company_id) {
+					getAllShippingCompanyVehicle({
+						company_id: this.form.company_id,
+						shipping_company_id: this.form.shipping_company_id
+					}).then(response => {
+						this.shipping_company_vehicles = response.data.data;
+					});
+				}
 			},
 			getOrder() {
 				let __this = this;

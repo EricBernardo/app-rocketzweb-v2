@@ -1,10 +1,10 @@
+/* Layout */
+import Layout from '@/layout'
 import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
 
-/* Layout */
-import Layout from '@/layout'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -52,7 +52,7 @@ export const constantRoutes = [
       {
         path: '',
         name: 'profile',
-        component: () => import('@/views/profile/index'),                
+        component: () => import('@/views/profile/index'),
       },
     ]
   },
@@ -73,12 +73,12 @@ export const constantRoutes = [
   {
     path: '/company',
     roles: ['root'],
-    component: Layout,    
+    component: Layout,
     children: [
       {
         path: '',
         name: 'company',
-        component: () => import('@/views/company/list'),        
+        component: () => import('@/views/company/list'),
         meta: { title: 'Empresa', icon: 'company' }
       },
       {
@@ -187,7 +187,6 @@ export const constantRoutes = [
     component: Layout,
     roles: ['root', 'administrator'],
     redirect: '/product_category',
-    name: 'product_category',
     children: [
       {
         path: 'list',
@@ -217,7 +216,6 @@ export const constantRoutes = [
     component: Layout,
     roles: ['root', 'administrator'],
     redirect: '/product',
-    name: 'product',
     children: [
       {
         path: 'list',
@@ -247,7 +245,6 @@ export const constantRoutes = [
     component: Layout,
     roles: ['root', 'administrator'],
     redirect: '/user',
-    name: 'user',
     children: [
       {
         path: 'list',
@@ -277,7 +274,6 @@ export const constantRoutes = [
     component: Layout,
     roles: ['root', 'administrator', 'client'],
     redirect: '/order',
-    name: 'order',
     children: [
       {
         path: 'list',

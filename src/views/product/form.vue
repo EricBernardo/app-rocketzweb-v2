@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    <el-card>
       <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
         <el-row :gutter="10">
           <el-card>
@@ -38,18 +37,6 @@
               <money v-model="form.price" :disabled="loading" class="el-input__inner"></money>
             </el-form-item>
           </el-col>
-          </el-card>
-          <el-card>
-					<div slot="header" class="clearfix">
-						<span>Informações adicionais</span>
-					</div>
-          <el-col :md="12" :sm="24">
-            <el-form-item label="CFOP (Código Fiscal de Operações e de Prestações)" prop="cfop">
-              <el-select filterable v-model="form.cfop" :disabled="loading">
-                <el-option v-for="item in cfops" :key="item.id" :label="item.title" :value="item.id"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
           <el-col :md="12" :sm="24">
             <el-form-item label="Unidade de medida comercial" prop="ucom">
               <el-select filterable v-model="form.ucom" :disabled="loading">
@@ -57,31 +44,43 @@
               </el-select>
             </el-form-item>
           </el-col>
+          </el-card>
+          <el-card>
+					<div slot="header" class="clearfix">
+						<span>Informações fiscais</span>
+					</div>
           <el-col :md="12" :sm="24">
-            <el-form-item label="CSOSN (Código de Situação da Operação do Simples Nacional)" prop="csosn">
-              <el-select filterable v-model="form.csosn" :disabled="loading">
-                <el-option v-for="item in csosns" :key="item.id" :label="item.title" :value="item.id"></el-option>
+            <el-form-item label="(CFOP) - Código Fiscal de Operações e de Prestações" prop="cfop">
+              <el-select filterable v-model="form.cfop" :disabled="loading">
+                <el-option v-for="item in cfops" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :md="12" :sm="24">
-            <el-form-item label="Tabela CST do IPI" prop="ipi_ipint_cst">
-              <el-select filterable v-model="form.ipi_ipint_cst" :disabled="loading">
-                <el-option v-for="item in ipi_csts" :key="item.id" :label="item.title" :value="item.id"></el-option>
+            <el-form-item label="(ICMS) -Situação tributária" prop="icms">
+              <el-select filterable v-model="form.icms" :disabled="loading">
+                <el-option v-for="item in icms_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :md="12" :sm="24">
-            <el-form-item label="Tabela CST do PIS" prop="pis_ipint_cst">
-              <el-select filterable v-model="form.pis_ipint_cst" :disabled="loading">
-                <el-option v-for="item in pis_cofins_csts" :key="item.id" :label="item.title" :value="item.id"></el-option>
+            <el-form-item label="(IPI) - Situação tributária" prop="ipi">
+              <el-select filterable v-model="form.ipi" :disabled="loading">
+                <el-option v-for="item in ipi_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :md="12" :sm="24">
-            <el-form-item label="Tabela CST do COFINS" prop="cofins_cofinsnt_cst">
-              <el-select filterable v-model="form.cofins_cofinsnt_cst" :disabled="loading">
-                <el-option v-for="item in pis_cofins_csts" :key="item.id" :label="item.title" :value="item.id"></el-option>
+            <el-form-item label="(PIS) - Situação tributária" prop="pis">
+              <el-select filterable v-model="form.pis" :disabled="loading">
+                <el-option v-for="item in pis_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="(COFINS) - Situação tributária" prop="cofins">
+              <el-select filterable v-model="form.cofins" :disabled="loading">
+                <el-option v-for="item in pis_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -102,7 +101,6 @@
           </el-card>
         </el-row>
       </el-form>
-    </el-card>
   </div>
 </template>
 
@@ -117,7 +115,7 @@ export default {
       loading: false,
       companies: [],
       categories: [],
-      pis_cofins_csts: [
+      pis_list: [
         {
           id: '01',
           title: 'Operação Tributável com Alíquota Básica',
@@ -159,7 +157,7 @@ export default {
           title: 'Outras Operações de Saída',
         },
       ],
-      ipi_csts: [
+      ipi_list: [
         {
           id: '50',
           title: 'Saída Tributada',
@@ -189,7 +187,7 @@ export default {
           title: 'Outras Saídas',
         },
       ],
-      csosns: [
+      icms_list: [
         {
           id: '101',
           title: 'Tributada pelo Simples Nacional com permissão de crédito de ICMS',
@@ -490,10 +488,10 @@ export default {
         weigh: 0,
         cfop: '5101',
         ucom: 'PC',
-        csosn: '103',
-        ipi_ipint_cst: '53',
-        pis_ipint_cst: '07',
-        cofins_cofinsnt_cst: '07',
+        icms: '103',
+        ipi: '53',
+        pis: '07',
+        cofins: '07',
       },
       rules: {
         company_id: [
@@ -539,25 +537,25 @@ export default {
             message: "Campo obrigatório"
           }
         ],
-        csosn: [
+        icms: [
           {
             required: true,
             message: "Campo obrigatório"
           }
         ],
-        ipi_ipint_cst: [
+        ipi: [
           {
             required: true,
             message: "Campo obrigatório"
           }
         ],
-        pis_ipint_cst: [
+        pis: [
           {
             required: true,
             message: "Campo obrigatório"
           }
         ],
-        cofins_cofinsnt_cst: [
+        cofins: [
           {
             required: true,
             message: "Campo obrigatório"
@@ -609,3 +607,8 @@ export default {
   }
 };
 </script>
+<style>
+  .el-card {
+    margin-bottom:  15px;
+  }
+</style>

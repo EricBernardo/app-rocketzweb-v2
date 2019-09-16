@@ -1,8 +1,11 @@
 <template>
 	<div class="app-container">
-		<el-card>
-			<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
-				<el-row :gutter="10">
+		<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
+			<el-row :gutter="10">
+				<el-card>
+					<div slot="header" class="clearfix">
+						<span>Informações</span>
+					</div>
 					<el-col :md="12" :sm="24">
 						<el-form-item label="Empresa" prop="company_id" v-if="profile.role=='root'">
 							<el-select filterable v-model="form.company_id" :disabled="loading">
@@ -16,6 +19,11 @@
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
+						<el-form-item label="E-mail" prop="email">
+							<el-input v-model="form.email" :disabled="loading"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
 						<el-form-item label="Telefone" prop="phone">
 							<el-input v-model="form.phone" :disabled="loading"></el-input>
 						</el-form-item>
@@ -25,6 +33,11 @@
 							<el-input v-model="form.cnpj" :disabled="loading"></el-input>
 						</el-form-item>
 					</el-col>
+				</el-card>
+				<el-card>
+					<div slot="header" class="clearfix">
+						<span>Endereço</span>
+					</div>
 					<el-col :md="12" :sm="24">
 						<el-form-item label="CEP" prop="cep">
 							<el-input
@@ -84,6 +97,11 @@
 							<el-input type="textarea" v-model="form.complement" :disabled="loading" :rows="5"></el-input>
 						</el-form-item>
 					</el-col>
+				</el-card>
+				<el-card>
+					<div slot="header" class="clearfix">
+						<span>Informações fiscais</span>
+					</div>
 					<el-col :md="12" :sm="24">
 						<el-form-item label="IE" prop="ie">
 							<el-input v-model="form.ie" :disabled="loading"></el-input>
@@ -94,11 +112,6 @@
 							<el-select filterable v-model="form.indIEDest" :disabled="loading">
 								<el-option v-for="item in indIEDests" :key="item.id" :label="item.name" :value="item.id"></el-option>
 							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :md="12" :sm="24">
-						<el-form-item label="E-mail" prop="email">
-							<el-input v-model="form.email" :disabled="loading"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :md="24" :sm="24">
@@ -115,9 +128,9 @@
 							>Salvar</el-button>
 						</el-form-item>
 					</el-col>
-				</el-row>
-			</el-form>
-		</el-card>
+				</el-card>
+			</el-row>
+		</el-form>
 	</div>
 </template>
 
@@ -167,7 +180,7 @@
 					phone: null,
 					complement: null,
 					ie: null,
-					indIEDest: null,
+					indIEDest: 1,
 					email: null
 				},
 				rules: {

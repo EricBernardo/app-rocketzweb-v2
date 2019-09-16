@@ -122,7 +122,7 @@
 						<span>Impostos (%)</span>
 					</div>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="IRPJ (Imposto de Renda de Pessoa Jurídica​)" prop="irpj">
+						<el-form-item label="(IRPJ) Imposto de Renda de Pessoa Jurídica​" prop="irpj">
 							<el-input-number
 								v-model="form.irpj"
 								:disabled="loading"
@@ -147,7 +147,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="PIS (Programa de Integração Social)" prop="pis">
+						<el-form-item label="(PIS) Programa de Integração Social" prop="pis">
 							<el-input-number
 								v-model="form.pis"
 								:disabled="loading"
@@ -158,7 +158,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="CSLL (Contribuição Social sobre Lucro Líquido)" prop="csll">
+						<el-form-item label="(CSLL) Contribuição Social sobre Lucro Líquido" prop="csll">
 							<el-input-number
 								v-model="form.csll"
 								:disabled="loading"
@@ -169,7 +169,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="ISS (Imposto sobre Serviço de Qualquer Natureza)" prop="iss">
+						<el-form-item label="(ISS) Imposto sobre Serviço de Qualquer Natureza" prop="iss">
 							<el-input-number
 								v-model="form.iss"
 								:disabled="loading"

@@ -20,14 +20,7 @@
 						<el-form-item label="IE" prop="title">
 							<el-input v-model="form.ie" :disabled="loading"></el-input>
 						</el-form-item>
-					</el-col>
-					<el-col :md="12" :sm="24">
-						<el-form-item label="CRT (Código regime tributário)" prop="crt">
-							<el-select filterable v-model="form.crt" :disabled="loading">
-								<el-option v-for="item in crts" :key="item.id" :label="item.name" :value="item.id"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
+					</el-col>					
 					<el-col :md="12" :sm="24">
 						<el-form-item label="CNPJ" prop="cnpj" v-mask="'##.###.###/####-##'">
 							<el-input v-model="form.cnpj" :disabled="loading"></el-input>
@@ -85,6 +78,19 @@
 								:min="1"
 								:max="99999"
 							></el-input-number>
+						</el-form-item>
+					</el-col>
+				</el-card>
+				<el-row :gutter="10">
+				<el-card>
+					<div slot="header" class="clearfix">
+						<span>Informações fiscais</span>
+					</div>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="CRT (Código regime tributário)" prop="crt">
+							<el-select filterable v-model="form.crt" :disabled="loading">
+								<el-option v-for="item in crts" :key="item.id" :label="item.name" :value="item.id"></el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 				</el-card>
@@ -239,7 +245,7 @@
 					cert_password: null,
 					cert_file: null,
 					ie: null,
-					crt: null,
+					crt: 1,
 					cnpj: null,
 					address: null,
 					number: null,

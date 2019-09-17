@@ -142,6 +142,123 @@
 			</el-card>
 			<el-card>
 				<div slot="header" class="clearfix">
+					<span>Informações fiscais</span>
+				</div>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Finalidade de emissão da NF-e" prop="finNFe">
+						<el-select							
+							v-model="form.finNFe"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in finnfe_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Tipo de Operação" prop="tpNF">
+						<el-select							
+							v-model="form.tpNF"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in tpnf_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Indicador de local de destino da operação" prop="idDest">
+						<el-select							
+							v-model="form.idDest"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in iddest_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Formato de impressão do DANFE" prop="tpImp">
+						<el-select							
+							v-model="form.tpImp"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in tpimp_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Tipo de emissão" prop="tpEmis">
+						<el-select							
+							v-model="form.tpEmis"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in tpemis_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Indica operação com consumidor final" prop="indFinal">
+						<el-select							
+							v-model="form.indFinal"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in indfinal_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Indicador de presença do comprador no estabelecimento" prop="indPres">
+						<el-select							
+							v-model="form.indPres"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in indpres_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
+			</el-card>
+			<el-card>
+				<div slot="header" class="clearfix">
 					<span>Totais</span>
 				</div>
 				<el-col :md="6" :sm="24">
@@ -225,7 +342,14 @@
 					observation: null,
 					shipping_company_id: null,
 					shipping_company_vehicle_id: null,
-					freight_value: 0
+					freight_value: 0,
+					finNFe: 1,
+					tpNF: 1,
+					idDest: 1,
+					tpImp: 1,
+					tpEmis: 1,
+					indFinal: 0,
+					indPres: 1
 				},
 				rules: {
 					client_id: [
@@ -257,8 +381,192 @@
 							required: true,
 							message: "Campo obrigatório"
 						}
+					],
+					finNFe: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					tpNF: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					idDest: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					tpImp: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					tpEmis: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					indFinal: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					indPres: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
 					]
-				}
+				},
+				finnfe_list: [
+					{
+						id: 1,
+						title: 'NF-e normal'
+					},
+					{
+						id: 2,
+						title: 'NF-e complementar'
+					},
+					{
+						id: 3,
+						title: 'NF-e de ajuste'
+					},
+					{
+						id: 4,
+						title: 'Devolução / Retorno'
+					},
+				],
+				tpnf_list: [
+					{
+						id: 0,
+						title: 'Entrada'
+					},
+					{
+						id: 1,
+						title: 'Saída'
+					},
+				],
+				iddest_list: [
+					{
+					id: 1,
+					title: 'Interna'
+					},
+					{
+					id: 2,
+					title: 'Interestadual'
+					},
+					{
+					id: 3,
+					title: 'Exterior'
+					},
+				],
+				tpimp_list: [
+					{
+						id: 0,
+						title: 'Sem DANFe'
+						},
+					{
+						id: 1,
+						title: 'DANFe Retrato'
+						},
+					{
+						id: 2,
+						title: 'DANFe Paisagem'
+						},
+					{
+						id: 3,
+						title: 'DANFe Simplificado'
+						},
+					{
+						id: 4,
+						title: 'DANFe NFC-e'
+						},
+					{
+						id: 5,
+						title: 'DANFe NFc-e resumido'
+						},
+					{
+						id: 6,
+						title: 'DANFe NFC-e em mesagem eletrônica'
+						},
+				],
+				tpemis_list: [
+					{
+						id: 1,
+						title: 'Normal - emissão normal'
+					},
+					{
+						id: 2,
+						title: 'Contingência FS - emissão em contingência com impressão do DANFE em Formulário de Segurança'
+					},
+					{
+						id: 4,
+						title: 'Contingência DPEC - emissão em contingência com envio da Declaração Prévia de Emissão em Contingência - DPEC'
+					},
+					{
+						id: 5,
+						title: 'Contingência FS-DA - emissão em contingência com impressão do DANFE em Formulário de Segurança para Impressão de Documento Auxiliar  de Documento Fiscal Eletrônico (FS-DA)'
+					},
+					{
+						id: 6,
+						title: 'Contingência SVC - AN'
+					},
+					{
+						id: 7,
+						title: 'Contingência SVC - RS'
+					},
+					{
+						id: 9,
+						title: 'Contingência off-line NFC-e'
+					}
+				],
+				indfinal_list: [
+					{
+						id: 0,
+						title: 'Normal'
+					},
+					{
+						id: 1,
+						title: 'Consumidor final'
+					},
+				],
+				indpres_list: [
+					{
+						id: 0,
+						title: 'Não se aplica (por exemplo, Nota Fiscal complementar ou de ajuste)',
+					},
+					{
+						id: 1,
+						title: 'Operação presencial',
+					},
+					{
+						id: 2,
+						title: 'Operação não presencial, pela Internet',
+					},
+					{
+						id: 3,
+						title: 'Operação não presencial, tele atendimento',
+					},
+					{
+						id: 4,
+						title: 'NFC-e em operação com entrega a domicílio',
+					},
+					{
+						id: 5,
+						title: 'Operação presencial, fora do estabelecimento',
+					},
+					{
+						id: 9,
+						title: 'Operação não presencial, outros',
+					},
+				]
 			};
 		},
 		computed: {
@@ -373,6 +681,13 @@
 							response.data.data.shipping_company_vehicle_id;
 						__this.form.freight_value =
 							response.data.data.freight_value;
+						__this.form.finNFe = response.data.data.finNFe;
+						__this.form.tpNF = response.data.data.tpNF;
+						__this.form.idDest = response.data.data.idDest;
+						__this.form.tpImp = response.data.data.tpImp;
+						__this.form.tpEmis = response.data.data.tpEmis;
+						__this.form.indFinal = response.data.data.indFinal;
+						__this.form.indPres = response.data.data.indPres;
 						__this.setClientsCompanies(false);
 						__this.setClientsCompanyVehicles();
 						__this.loading = false;

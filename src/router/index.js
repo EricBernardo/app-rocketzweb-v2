@@ -107,7 +107,7 @@ export const constantRoutes = [
         path: '',
         name: 'client',
         component: () => import('@/views/client/list'),
-        meta: { title: 'Cliente', icon: 'user' }
+        meta: { title: 'Cliente', icon: 'users' }
       },
       {
         path: '/client/create',
@@ -135,7 +135,7 @@ export const constantRoutes = [
         path: '',
         name: 'shipping_company',
         component: () => import('@/views/shipping_company/list'),
-        meta: { title: 'Transportadora', icon: 'user' }
+        meta: { title: 'Transportadora', icon: 'shipping_company' }
       },
       {
         path: '/shipping_company/create',
@@ -163,7 +163,7 @@ export const constantRoutes = [
         path: '',
         name: 'shipping_company_vehicle',
         component: () => import('@/views/shipping_company_vehicle/list'),
-        meta: { title: 'Veículo', icon: 'user' }
+        meta: { title: 'Veículo', icon: 'truck' }
       },
       {
         path: '/shipping_company_vehicle/create',

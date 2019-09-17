@@ -1,7 +1,8 @@
-import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
-import store from '@/store'
-import { getToken } from '@/utils/auth'
+import router from '@/router';
+import store from '@/store';
+import { getToken, removeToken } from '@/utils/auth';
+import axios from 'axios';
+import { Message } from 'element-ui';
 
 // create an axios instance
 const service = axios.create({
@@ -73,12 +74,66 @@ service.interceptors.response.use(
     // }
   },
   error => {
-    console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
+    let text = ''
+
+    if (error.response.status === 422) {
+      Object.values(error.response.data.errors).forEach(function (values, key) {
+
+        if (!key) {
+          text += '<hr style="height:1px;border:none;color:red;background-color:red;" />';
+        }
+
+        values.map(function (value) {
+          text += '<p>' + value + '</p>'
+        })
+
+      })
+    }
+
+    if (error.response.status === 500) {
+      text = "<p>" + error.response.data.message + "</p>";
+    }
+
+    if (text) {
+
+      Message({
+        message: '<b>Atenção</b>' + text,
+        type: 'error',
+        duration: 5 * 1000,
+        dangerouslyUseHTMLString: true
+      })
+
+    }
+
+    if (error.response.status === 403) {
+
+      router.push({
+        name: 'dashboard'
+      });
+
+    }
+
+    if (error.response.status === 401) {
+
+      Message({
+        message: '<b>Não autorizado</b>',
+        type: 'error',
+        duration: 5 * 1000,
+        dangerouslyUseHTMLString: true
+      })
+
+      removeToken()
+
+      if (location.hash.indexOf('login') === -1) {
+
+        setTimeout(() => {
+          location.reload()
+        }, 1000);
+
+      }
+
+    }
+
     return Promise.reject(error)
   }
 )

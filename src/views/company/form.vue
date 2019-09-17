@@ -12,12 +12,17 @@
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="Nome Fantasia" prop="title">
+						<el-form-item label="Nome Fantasia" prop="fantasy">
 							<el-input v-model="form.fantasy" :disabled="loading"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="IE" prop="title">
+						<el-form-item label="Telefone" prop="phone">
+							<el-input v-model="form.phone" :disabled="loading"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
+						<el-form-item label="IE" prop="ie">
 							<el-input v-model="form.ie" :disabled="loading"></el-input>
 						</el-form-item>
 					</el-col>					
@@ -81,7 +86,6 @@
 						</el-form-item>
 					</el-col>
 				</el-card>
-				<el-row :gutter="10">
 				<el-card>
 					<div slot="header" class="clearfix">
 						<span>Informações fiscais</span>
@@ -257,7 +261,8 @@
 					cofins: 0,
 					pis: 0,
 					csll: 0,
-					iss: 0
+					iss: 0,
+					phone: null
 				},
 				rules: {
 					title: [
@@ -351,6 +356,12 @@
 						}
 					],
 					iss: [
+						{
+							required: true,
+							message: "Campo obrigatório"
+						}
+					],
+					phone: [
 						{
 							required: true,
 							message: "Campo obrigatório"

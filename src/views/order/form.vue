@@ -256,6 +256,54 @@
 						</el-select>
 					</el-form-item>
 				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Indicador da forma de pagamento" prop="indPag">
+						<el-select							
+							v-model="form.indPag"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in indPag_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>				
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Forma de Pagamento" prop="tPag">
+						<el-select							
+							v-model="form.tPag"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in tPag_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>				
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Modalidade do frete" prop="modFrete">
+						<el-select							
+							v-model="form.modFrete"
+							:disabled="loading"
+							filterable
+						>
+							<el-option
+								v-for="item in modFrete_list"
+								:key="item.id"
+								:label="item.title"
+								:value="item.id"
+							></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>				
 			</el-card>
 			<el-card>
 				<div slot="header" class="clearfix">
@@ -349,7 +397,10 @@
 					tpImp: 1,
 					tpEmis: 1,
 					indFinal: 0,
-					indPres: 1
+					indPres: 1,
+					indPag: 0,
+					tPag: '01',
+					modFrete: 0,
 				},
 				rules: {
 					client_id: [
@@ -566,6 +617,72 @@
 						id: 9,
 						title: 'Operação não presencial, outros',
 					},
+				],
+				indPag_list: [
+					{
+						id: 0,
+						title: 'Pagamento à vista'
+					},
+					{
+						id: 1,
+						title: 'Pagamento à prazo'
+					},
+					{
+						id: 2,
+						title: 'Outros'
+					},
+				],
+				tPag_list: [
+					{
+						id: '01',
+						title: 'Dinheiro'
+					},
+					{
+						id: '02',
+						title: 'Cheque'
+					},
+					{
+						id: '03',
+						title: 'Cartão de Crédito'
+					},
+					{
+						id: '04',
+						title: 'Cartão de Débito'
+					},
+					{
+						id: '05',
+						title: 'Crédito Loja'
+					},
+					{
+						id: '10',
+						title: 'Vale Alimentação'
+					},
+					{
+						id: '11',
+						title: 'Vale Refeição'
+					},
+					{
+						id: '12',
+						title: 'Vale Presente'
+					},
+					{
+						id: '13',
+						title: 'Vale Combustível'
+					},
+					{
+						id: '99',
+						title: 'Outros'
+					},
+				],
+				modFrete_list: [
+					{
+						id: 0,
+						title: 'Contratação do Frete por conta do Remetente (CIF)'
+					},
+					{
+						id: 1,
+						title: 'Contratação do Frete por conta do Destinatário (FOB)'
+					},
 				]
 			};
 		},
@@ -688,6 +805,9 @@
 						__this.form.tpEmis = response.data.data.tpEmis;
 						__this.form.indFinal = response.data.data.indFinal;
 						__this.form.indPres = response.data.data.indPres;
+						__this.form.indPag = response.data.data.indPag;
+						__this.form.tPag = response.data.data.tPag;
+						__this.form.modFrete = response.data.data.modFrete;
 						__this.setClientsCompanies(false);
 						__this.setClientsCompanyVehicles();
 						__this.loading = false;

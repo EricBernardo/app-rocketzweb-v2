@@ -108,9 +108,9 @@
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="Inscrição estadual destinatário" prop="indIEDest">
+						<el-form-item label="Indicador da IE do destinatário" prop="indIEDest">
 							<el-select filterable v-model="form.indIEDest" :disabled="loading">
-								<el-option v-for="item in indIEDests" :key="item.id" :label="item.name" :value="item.id"></el-option>
+								<el-option v-for="item in indIEDests" :key="item.id" :label="item.id + ' - ' + item.name" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>

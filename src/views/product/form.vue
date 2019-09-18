@@ -57,7 +57,7 @@
             </el-form-item>
           </el-col>
           <el-col :md="12" :sm="24">
-            <el-form-item label="(ICMS) -Situação tributária" prop="icms">
+            <el-form-item label="(ICMS) - Situação tributária" prop="icms">
               <el-select filterable v-model="form.icms" :disabled="loading">
                 <el-option v-for="item in icms_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
               </el-select>

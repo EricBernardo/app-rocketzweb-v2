@@ -103,12 +103,12 @@
 						<span>Informações fiscais</span>
 					</div>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="IE" prop="ie">
+						<el-form-item label="Inscrição estadual" prop="ie">
 							<el-input v-model="form.ie" :disabled="loading"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
-						<el-form-item label="IE Destinatário" prop="indIEDest">
+						<el-form-item label="Inscrição estadual destinatário" prop="indIEDest">
 							<el-select filterable v-model="form.indIEDest" :disabled="loading">
 								<el-option v-for="item in indIEDests" :key="item.id" :label="item.name" :value="item.id"></el-option>
 							</el-select>

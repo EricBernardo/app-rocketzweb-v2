@@ -14,7 +14,7 @@
 				>Adicionar produto</el-button>
 
 				<el-col :md="6" :sm="24">
-					<el-form-item class="order-company" label="Empresas" prop="company_id" v-if="companies.length">
+					<el-form-item label="Empresas" prop="company_id" v-if="companies.length">
 						<el-select
 							v-model="form.company_id"
 							:disabled="loading"

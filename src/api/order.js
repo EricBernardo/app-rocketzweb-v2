@@ -45,3 +45,17 @@ export function destroy(id) {
     method: 'delete'
   })
 }
+
+export function createInvoice(id) {
+  return request({
+    url: '/nfe/' + id,
+    method: 'post'
+  })
+}
+export function downloadDanfe(id) {
+  return request({
+    url: '/nfe/' + id,
+    method: 'get',
+    responseType: 'arraybuffer'
+  })
+}

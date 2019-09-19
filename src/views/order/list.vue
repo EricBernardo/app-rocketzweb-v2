@@ -24,9 +24,9 @@
               <el-tooltip class="item" effect="dark" content="Gerar NFE" placement="left">
                 <el-button class="button-order-list" type="warning" plain icon="el-icon-setting" :disabled="Boolean(scope.row.receipt)" :loading="loading_generate_invoice" @click.prevent="generateInvoice(scope)"></el-button>
               </el-tooltip>
-              <!-- <el-tooltip class="item" effect="dark" content="Consultar NFE" placement="left">
-                <el-button class="button-order-list" type="success" icon="el-icon-search" :disabled="!Boolean(scope.row.receipt)" :loading="loading_consult_invoice" @click.prevent="showProtocol(scope.row.id)"></el-button>
-              </el-tooltip>             -->
+              <el-tooltip class="item" effect="dark" content="Consultar NFE" placement="left">
+                <el-button class="button-order-list" type="success" plain icon="el-icon-search" :disabled="!Boolean(scope.row.receipt)" :loading="loading_consult_protocol" @click.prevent="showProtocol(scope.row.id)"></el-button>
+              </el-tooltip>
               <el-tooltip class="item" effect="dark" content="Baixar DANFE" placement="left">
                 <el-button class="button-order-list" type="primary" plain icon="el-icon-download" @click.prevent="downloadDanfe(scope.row.id)" :loading="loading_download_danfe" :disabled="!Boolean(scope.row.xml)"></el-button>
               </el-tooltip>
@@ -74,7 +74,7 @@ export default {
       listLoading: false,
       loading_generate_invoice: false,
       loading_download_danfe: false,
-      loading_consult_invoice: false
+      loading_consult_protocol: false
     };
   },
   computed: {
@@ -112,14 +112,20 @@ export default {
       })  
     },
     showProtocol(id) {    
-      this.loading_generate_invoice = true  
-      showProtocol(scope.row.id)
-      .then(response => {          
-        console.log('response', response);
-        this.loading_generate_invoice = false
-      })
-      .catch(() => {        
-        this.loading_generate_invoice = false
+      this.loading_consult_protocol = true  
+      showProtocol(id)
+      .then(response => {                  
+        this.$alert(response.data.data.protNFe.infProt.xMotivo, (response.data.data.protNFe.infProt.cStat != 103 ? 'Atenção' : 'Resultado'), {          
+          confirmButtonText: 'OK',
+          type: (response.data.data.protNFe.infProt.cStat != 103 ? 'warning' : 'success')
+        })
+        this.loading_consult_protocol = false
+      }).catch((error) => {        
+        this.$alert(error.message, 'Atenção', {          
+          confirmButtonText: 'OK',
+          type: 'warning'
+        })
+        this.loading_consult_protocol = false
       })
     },
     fetchData(page = 1) {
@@ -135,13 +141,11 @@ export default {
         confirmButtonText: "Confirmar",
         cancelButtonText: "Cancelar",
         type: "warning"
-      })
-        .then(() => {
-          destroy(id).then(response => {
-            this.fetchData();
-          });
-        })
-        .catch(() => {});
+      }).then(() => {
+        destroy(id).then(response => {
+          this.fetchData();
+        });
+      }).catch(() => {});
     }
   }
 };

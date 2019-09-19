@@ -19,25 +19,28 @@
         <el-table-column label="Data de emissão">
           <template slot-scope="scope">{{ scope.row.date | moment("DD/MM/YYYY") }}</template>
         </el-table-column>
-        <el-table-column label="-">
+        <el-table-column width="125">
           <template slot-scope="scope">            
-              <el-tooltip class="item" effect="dark" content="Gerar NFE" placement="top-start">
-                <el-button class="button-nfe" type="warning" icon="el-icon-setting" :disabled="Boolean(scope.row.receipt)" :loading="loading_generate_invoice" @click.prevent="generateInvoice(scope.row.id)"></el-button>
+              <el-tooltip class="item" effect="dark" content="Gerar NFE" placement="left">
+                <el-button class="button-order-list" type="warning" icon="el-icon-setting" :disabled="Boolean(scope.row.receipt)" :loading="loading_generate_invoice" @click.prevent="generateInvoice(scope)"></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="Baixar DANFE" placement="top-start">
-                <el-button class="button-nfe" type="primary" icon="el-icon-download" @click.prevent="downloadDanfe(scope.row.id)" :loading="loading_download_danfe" :disabled="!Boolean(scope.row.receipt)"></el-button>
+              <!-- <el-tooltip class="item" effect="dark" content="Consultar NFE" placement="left">
+                <el-button class="button-order-list" type="success" icon="el-icon-search" :disabled="!Boolean(scope.row.receipt)" :loading="loading_consult_invoice" @click.prevent="showProtocol(scope.row.id)"></el-button>
+              </el-tooltip>             -->
+              <el-tooltip class="item" effect="dark" content="Baixar DANFE" placement="left">
+                <el-button class="button-order-list" type="primary" icon="el-icon-download" @click.prevent="downloadDanfe(scope.row.id)" :loading="loading_download_danfe" :disabled="!Boolean(scope.row.xml)"></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="Cancelar NFE" placement="top-start">
-                <el-button class="button-nfe" type="danger" icon="el-icon-delete" :disabled="!Boolean(scope.row.receipt)"></el-button>
+              <el-tooltip class="item" effect="dark" content="Cancelar NFE" placement="left">
+                <el-button class="button-order-list" type="danger" icon="el-icon-delete" :disabled="!Boolean(scope.row.receipt)"></el-button>
               </el-tooltip>            
           </template>
         </el-table-column>
-        <el-table-column label="-">
+        <el-table-column width="125">
           <template slot-scope="scope">           
-              <router-link :to="{ name: 'order.edit', params: { id: scope.row.id } }" class="pull-left">
-                <el-button type="primary" size="mini" icon="el-icon-edit">Editar</el-button>
+              <router-link :to="{ name: 'order.edit', params: { id: scope.row.id } }">
+                <el-button type="primary" size="mini" icon="el-icon-edit" class="button-order-list">Editar</el-button>
               </router-link>
-              <el-button type="danger" size="mini" icon="el-icon-delete" @click.prevent="destroyData(scope.row.id)" class="pull-left">Excluir</el-button>            
+              <el-button type="danger" size="mini" icon="el-icon-delete" @click.prevent="destroyData(scope.row.id)" class="button-order-list">Excluir</el-button>            
           </template>
         </el-table-column>
       </el-table>
@@ -51,7 +54,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { get, destroy, createInvoice, downloadDanfe } from "@/api/order";
+import { get, destroy, createInvoice, showProtocol, downloadDanfe } from "@/api/order";
 import axios from 'axios';
 
 export default {
@@ -70,7 +73,8 @@ export default {
       list: {},
       listLoading: false,
       loading_generate_invoice: false,
-      loading_download_danfe: false
+      loading_download_danfe: false,
+      loading_consult_invoice: false
     };
   },
   computed: {
@@ -95,7 +99,7 @@ export default {
         this.loading_download_danfe = false
       })
     },
-    generateInvoice(id) {
+    generateInvoice(scope) {
       this.$confirm("Desejas realmente gerar o NFE?", "Atenção", {
         confirmButtonText: "Confirmar",
         cancelButtonText: "Cancelar",
@@ -103,8 +107,10 @@ export default {
       })
       .then(() => {      
         this.loading_generate_invoice = true  
-        createInvoice(id)
-        .then(response => {
+        createInvoice(scope.row.id)
+        .then(response => {          
+          scope.row.xml = response.data.xml;
+          scope.row.receipt = response.data.receipt;  
           this.loading_generate_invoice = false
         })
         .catch(() => {        
@@ -112,6 +118,17 @@ export default {
         })
 
       })      
+    },
+    showProtocol(id) {    
+      this.loading_generate_invoice = true  
+      showProtocol(scope.row.id)
+      .then(response => {          
+        console.log('response', response);
+        this.loading_generate_invoice = false
+      })
+      .catch(() => {        
+        this.loading_generate_invoice = false
+      })
     },
     fetchData(page = 1) {
       this.listLoading = true
@@ -138,12 +155,11 @@ export default {
 };
 </script>
 <style scoped>
-  .el-button {
-    margin-left: 5px;
-  }
-  .button-nfe {
+  
+  .button-order-list {
     width: 100%;
     float: left;
     margin-bottom: 5px;
+    margin-left: 0px;
   }
 </style>

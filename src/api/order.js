@@ -59,3 +59,9 @@ export function downloadDanfe(id) {
     responseType: 'arraybuffer'
   })
 }
+export function showProtocol(id) {
+  return request({
+    url: '/nfe/' + id + '/protocol',
+    method: 'get'
+  })
+}

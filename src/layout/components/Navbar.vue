@@ -1,17 +1,14 @@
 <template>
-  <div class="navbar">
-  
+  <div class="navbar">  
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
     <breadcrumb class="breadcrumb-container" />
-
-    <div class="right-menu">
-      {{profile.name}}
+    <div class="right-menu">      
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <svg-icon icon-class="user"/>
           <i class="el-icon-caret-bottom" />
-        </div>
+          {{profile.name}}
+        </div>        
         <el-dropdown-menu slot="dropdown" class="user-dropdown">          
           <router-link :to="{ name: 'profile' }">
             <el-dropdown-item>Meu Perfil</el-dropdown-item>

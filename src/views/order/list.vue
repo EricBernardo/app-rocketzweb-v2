@@ -19,23 +19,23 @@
         <el-table-column label="Data de emissão">
           <template slot-scope="scope">{{ scope.row.date | moment("DD/MM/YYYY") }}</template>
         </el-table-column>
-        <el-table-column width="125">
+        <el-table-column label="Ações fiscais" width="125">
           <template slot-scope="scope">            
               <el-tooltip class="item" effect="dark" content="Gerar NFE" placement="left">
-                <el-button class="button-order-list" type="warning" icon="el-icon-setting" :disabled="Boolean(scope.row.receipt)" :loading="loading_generate_invoice" @click.prevent="generateInvoice(scope)"></el-button>
+                <el-button class="button-order-list" type="warning" plain icon="el-icon-setting" :disabled="Boolean(scope.row.receipt)" :loading="loading_generate_invoice" @click.prevent="generateInvoice(scope)"></el-button>
               </el-tooltip>
               <!-- <el-tooltip class="item" effect="dark" content="Consultar NFE" placement="left">
                 <el-button class="button-order-list" type="success" icon="el-icon-search" :disabled="!Boolean(scope.row.receipt)" :loading="loading_consult_invoice" @click.prevent="showProtocol(scope.row.id)"></el-button>
               </el-tooltip>             -->
               <el-tooltip class="item" effect="dark" content="Baixar DANFE" placement="left">
-                <el-button class="button-order-list" type="primary" icon="el-icon-download" @click.prevent="downloadDanfe(scope.row.id)" :loading="loading_download_danfe" :disabled="!Boolean(scope.row.xml)"></el-button>
+                <el-button class="button-order-list" type="primary" plain icon="el-icon-download" @click.prevent="downloadDanfe(scope.row.id)" :loading="loading_download_danfe" :disabled="!Boolean(scope.row.xml)"></el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="Cancelar NFE" placement="left">
-                <el-button class="button-order-list" type="danger" icon="el-icon-delete" :disabled="!Boolean(scope.row.receipt)"></el-button>
+                <el-button class="button-order-list" type="danger" plain icon="el-icon-delete" :disabled="!Boolean(scope.row.receipt)"></el-button>
               </el-tooltip>            
           </template>
         </el-table-column>
-        <el-table-column width="125">
+        <el-table-column label="-"  width="125">
           <template slot-scope="scope">           
               <router-link :to="{ name: 'order.edit', params: { id: scope.row.id } }">
                 <el-button type="primary" size="mini" icon="el-icon-edit" class="button-order-list">Editar</el-button>
@@ -99,25 +99,17 @@ export default {
         this.loading_download_danfe = false
       })
     },
-    generateInvoice(scope) {
-      this.$confirm("Desejas realmente gerar o NFE?", "Atenção", {
-        confirmButtonText: "Confirmar",
-        cancelButtonText: "Cancelar",
-        type: "warning"
+    generateInvoice(scope) {      
+      this.loading_generate_invoice = true  
+      createInvoice(scope.row.id)
+      .then(response => {          
+        scope.row.xml = response.data.xml;
+        scope.row.receipt = response.data.receipt;  
+        this.loading_generate_invoice = false
       })
-      .then(() => {      
-        this.loading_generate_invoice = true  
-        createInvoice(scope.row.id)
-        .then(response => {          
-          scope.row.xml = response.data.xml;
-          scope.row.receipt = response.data.receipt;  
-          this.loading_generate_invoice = false
-        })
-        .catch(() => {        
-          this.loading_generate_invoice = false
-        })
-
-      })      
+      .catch(() => {        
+        this.loading_generate_invoice = false
+      })  
     },
     showProtocol(id) {    
       this.loading_generate_invoice = true  

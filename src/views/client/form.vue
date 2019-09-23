@@ -276,7 +276,7 @@
 			infoCnpj() {				
 				if(this.form.cnpj && this.form.cnpj.length >= 14) {
 					this.loading_cnpj = true;
-					getInfoCnpj({cnpj: this.form.cnpj}).then(response => {
+					getInfoCnpj({cnpj: this.form.cnpj.replace(/\D/g, "")}).then(response => {
 						this.form.title = response.data.data.nome
 						this.form.fantasy = response.data.data.fantasia
 						this.form.cep = response.data.data.cep

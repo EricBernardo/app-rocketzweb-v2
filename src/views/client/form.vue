@@ -14,6 +14,13 @@
 						</el-form-item>
 					</el-col>
 					<el-col :md="12" :sm="24">
+						<el-form-item label="CNPJ" prop="cnpj" v-mask="'##.###.###/####-##'">
+							<el-input v-model="form.cnpj" :disabled="loading || loading_cnpj">
+								<el-button :loading="loading_cnpj" slot="append" icon="el-icon-search" @click.prevent="infoCnpj"></el-button>
+							</el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :md="12" :sm="24">
 						<el-form-item label="Título" prop="title">
 							<el-input v-model="form.title" :disabled="loading"></el-input>
 						</el-form-item>
@@ -26,11 +33,6 @@
 					<el-col :md="12" :sm="24">
 						<el-form-item label="Telefone" prop="phone">
 							<el-input v-model="form.phone" :disabled="loading"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :md="12" :sm="24">
-						<el-form-item label="CNPJ" prop="cnpj" v-mask="'##.###.###/####-##'">
-							<el-input v-model="form.cnpj" :disabled="loading"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-card>
@@ -141,6 +143,7 @@
 	import { getCEP } from "@/api/cep";
 	import { show, save } from "@/api/client";
 	import { getAllCompany } from "@/api/company";
+	import { getInfoCnpj } from "@/api/cnpj";
 
 	export default {
 		data() {
@@ -148,6 +151,7 @@
 				loading: false,
 				loading_cep: false,
 				loading_cities: false,
+				loading_cnpj: false,
 				states: [],
 				cities: [],
 				companies: [],
@@ -269,6 +273,27 @@
 			}
 		},
 		methods: {
+			infoCnpj() {				
+				if(this.form.cnpj && this.form.cnpj.length >= 14) {
+					this.loading_cnpj = true;
+					getInfoCnpj({cnpj: this.form.cnpj}).then(response => {
+						this.form.title = response.data.data.nome
+						this.form.fantasy = response.data.data.fantasia
+						this.form.cep = response.data.data.cep
+						this.form.phone = response.data.data.telefone
+						this.form.number = response.data.data.numero
+						this.form.email = response.data.data.email
+						if(this.form.cep) {
+							this.getCep()
+						}												
+					})
+					.finally(response => {
+						this.loading_cnpj = false;
+					});
+				} else {
+					this.$message.warning(`CNPJ inválido.`);
+				}
+			},
 			onSubmit(formName) {
 				this.$refs[formName].validate(valid => {
 					if (valid) {

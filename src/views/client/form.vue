@@ -52,27 +52,21 @@
 				</div>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="CEP" prop="cep">
-						<el-input v-model="form.cep"
-						          v-on:change="getCep()"
-						          :disabled="loading || loading_cep"
-						          v-mask="'#####-###'"></el-input>
+						<el-input v-model="form.cep" :disabled="loading || loading_cep" v-mask="'#####-###'">
+							<el-button :loading="loading_cep" slot="append" icon="el-icon-search" @click.prevent="getCep(true)" title="Consultar CEP"></el-button>
+						</el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Estado" prop="state_id">
-						<el-select filterable
-						           v-model="form.state_id"
-						           @change="getCities(true)"
-						           :disabled="loading || loading_cep || loading_cities">
+						<el-select filterable v-model="form.state_id" @change="getCities(true)" :disabled="loading || loading_cep || loading_cities">
 							<el-option v-for="item in states" :key="item.id" :label="item.name" :value="item.id"></el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Cidade" prop="city_id">
-						<el-select filterable
-						           v-model="form.city_id"
-						           :disabled="loading || loading_cep || loading_cities">
+						<el-select filterable v-model="form.city_id" :disabled="loading || loading_cep || loading_cities">
 							<el-option v-for="item in cities" :key="item.id" :label="item.name" :value="item.id"></el-option>
 						</el-select>
 					</el-form-item>
@@ -89,11 +83,7 @@
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Número" prop="number">
-						<el-input-number v-model="form.number"
-						                 :disabled="loading"
-						                 controls-position="right"
-						                 :min="1"
-						                 :max="99999"></el-input-number>
+						<el-input-number v-model="form.number" :disabled="loading" controls-position="right" :min="1" :max="99999"></el-input-number>
 					</el-form-item>
 				</el-col>
 				<el-col :md="24" :sm="24">
@@ -123,11 +113,7 @@
 						<router-link to="/client" class="pull-left">
 							<el-button size="mini">Voltar</el-button>
 						</router-link>
-						<el-button size="mini"
-						           :loading="loading"
-						           type="primary"
-						           class="pull-right"
-						           @click="onSubmit('form')">Salvar</el-button>
+						<el-button size="mini" :loading="loading" type="primary" class="pull-right" @click="onSubmit('form')">Salvar</el-button>
 					</el-form-item>
 				</el-col>
 			</el-card>
@@ -302,8 +288,8 @@ export default {
             if (response.data.data.numero) this.form.number = response.data.data.numero.replace(/\D/g, '')
             if (response.data.data.logradouro) this.form.address = response.data.data.logradouro
             if (response.data.data.complemento) this.form.complement = response.data.data.complemento
-						if (response.data.data.telefone) this.form.phone = response.data.data.telefone
-						if (response.data.data.fantasia) this.form.fantasy = response.data.data.fantasia
+            if (response.data.data.telefone) this.form.phone = response.data.data.telefone
+            if (response.data.data.fantasia) this.form.fantasy = response.data.data.fantasia
             if (this.form.cep) this.getCep(false)
           })
           .finally(response => {

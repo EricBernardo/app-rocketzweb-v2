@@ -146,7 +146,7 @@
 				</div>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Finalidade de emissão da NF-e" prop="finNFe">
-						<el-select							
+						<el-select
 							v-model="form.finNFe"
 							:disabled="loading"
 							filterable
@@ -162,7 +162,7 @@
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Tipo de Operação" prop="tpNF">
-						<el-select							
+						<el-select
 							v-model="form.tpNF"
 							:disabled="loading"
 							filterable
@@ -178,7 +178,7 @@
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Indicador de local de destino da operação" prop="idDest">
-						<el-select							
+						<el-select
 							v-model="form.idDest"
 							:disabled="loading"
 							filterable
@@ -194,7 +194,7 @@
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Formato de impressão do DANFE" prop="tpImp">
-						<el-select							
+						<el-select
 							v-model="form.tpImp"
 							:disabled="loading"
 							filterable
@@ -210,7 +210,7 @@
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Tipo de emissão" prop="tpEmis">
-						<el-select							
+						<el-select
 							v-model="form.tpEmis"
 							:disabled="loading"
 							filterable
@@ -226,7 +226,7 @@
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Indica operação com consumidor final" prop="indFinal">
-						<el-select							
+						<el-select
 							v-model="form.indFinal"
 							:disabled="loading"
 							filterable
@@ -242,7 +242,7 @@
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Indicador de presença do comprador no estabelecimento" prop="indPres">
-						<el-select							
+						<el-select
 							v-model="form.indPres"
 							:disabled="loading"
 							filterable
@@ -258,7 +258,7 @@
 				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Indicador da forma de pagamento" prop="indPag">
-						<el-select							
+						<el-select
 							v-model="form.indPag"
 							:disabled="loading"
 							filterable
@@ -271,10 +271,10 @@
 							></el-option>
 						</el-select>
 					</el-form-item>
-				</el-col>				
+				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Forma de Pagamento" prop="tPag">
-						<el-select							
+						<el-select
 							v-model="form.tPag"
 							:disabled="loading"
 							filterable
@@ -287,10 +287,10 @@
 							></el-option>
 						</el-select>
 					</el-form-item>
-				</el-col>				
+				</el-col>
 				<el-col :md="12" :sm="24">
 					<el-form-item label="Modalidade do frete" prop="modFrete">
-						<el-select							
+						<el-select
 							v-model="form.modFrete"
 							:disabled="loading"
 							filterable
@@ -303,7 +303,7 @@
 							></el-option>
 						</el-select>
 					</el-form-item>
-				</el-col>				
+				</el-col>
 			</el-card>
 			<el-card>
 				<div slot="header" class="clearfix">
@@ -897,8 +897,5 @@
 <style>
 	.el-form-item__content {
 		margin-right: 15px;
-	}
-	.el-card {
-		margin-bottom: 15px;
 	}
 </style>

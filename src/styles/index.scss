@@ -66,7 +66,7 @@ div:focus {
 
 .avatar-container {
   cursor: pointer;
-  padding-right: 15px; 
+  padding-right: 15px;
 }
 
 .el-form-item__label{
@@ -121,6 +121,10 @@ div:focus {
 
 .pagination .sr-only {
   display: none;
+}
+
+.el-card {
+  margin-bottom: 15px;
 }
 
 .el-date-editor.el-input, .el-date-editor.el-input__inner,

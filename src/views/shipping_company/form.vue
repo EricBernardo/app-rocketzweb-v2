@@ -248,7 +248,7 @@ export default {
             if (response.data.data.fantasia) this.form.fantasy = response.data.data.fantasia
             if (response.data.data.cep) this.form.cep = response.data.data.cep
             if (response.data.data.bairro) this.form.neighborhood = response.data.data.bairro
-            if (response.data.data.numero) this.form.number = response.data.data.numero
+            if (response.data.data.numero) this.form.number = response.data.data.numero.replace(/\D/g, '')
             if (response.data.data.logradouro) this.form.address = response.data.data.logradouro
             if (response.data.data.complemento) this.form.complement = response.data.data.complemento
             if (this.form.cep) this.getCep(false)

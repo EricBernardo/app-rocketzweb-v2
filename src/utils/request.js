@@ -20,7 +20,7 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Authorization'] = 'Bearer ' + getToken()      
+      config.headers['Authorization'] = 'Bearer ' + getToken()
     }
     return config
   },
@@ -92,6 +92,10 @@ service.interceptors.response.use(
 
     if (error.response.status === 500) {
       text = "<p>" + error.response.data.message + "</p>";
+    }
+
+    if (error.response.status === 429) {
+      text = "<p>Muitas consultas realizadas. Por favor tente novamente mais tarde</p>";
     }
 
     if (text) {

@@ -82,6 +82,11 @@
 					</el-form-item>
 				</el-col>
 				<el-col :md="24" :sm="24">
+					<el-form-item label="Complemento" prop="complement">
+						<el-input type="textarea" v-model="form.complement" :disabled="loading" :rows="5"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :md="24" :sm="24">
 					<el-form-item>
 						<router-link to="/shipping_company" class="pull-left">
 							<el-button size="mini">Voltar</el-button>
@@ -133,7 +138,8 @@ export default {
         city_id: null,
         cep: null,
         ie: null,
-        fantasy: null
+        fantasy: null,
+        complement: null
       },
       rules: {
         company_id: [
@@ -244,6 +250,7 @@ export default {
             if (response.data.data.bairro) this.form.neighborhood = response.data.data.bairro
             if (response.data.data.numero) this.form.number = response.data.data.numero
             if (response.data.data.logradouro) this.form.address = response.data.data.logradouro
+            if (response.data.data.complemento) this.form.complement = response.data.data.complemento
             if (this.form.cep) this.getCep(false)
           })
           .finally(response => {

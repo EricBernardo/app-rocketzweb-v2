@@ -33,6 +33,20 @@
 						<el-input v-model="form.ie" :disabled="loading"></el-input>
 					</el-form-item>
 				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Logo">
+						<el-upload class="company-image-uploader"
+						           :action="`${base_api}/company/image`"
+						           :headers="{'Authorization': 'Bearer ' + token, 'Accept': 'application/json' }"
+						           :show-file-list="false"
+						           :on-success="handleAvatarSuccess"
+						           :before-upload="beforeAvatarUpload">
+							<img v-if="imageUrl" :src="imageUrl" class="company-image">
+							<i v-else class="el-icon-plus company-image-uploader-icon"></i>
+						</el-upload>
+
+					</el-form-item>
+				</el-col>
 			</el-card>
 			<el-card>
 				<div slot="header" class="clearfix">
@@ -206,6 +220,7 @@ import { getInfoCnpj } from '@/api/cnpj'
 export default {
   data() {
     return {
+      imageUrl: null,
       fileList: [],
       token: getToken(),
       base_api: process.env.VUE_APP_BASE_API,
@@ -374,11 +389,29 @@ export default {
             this.fileList.push({ name: response.data.data[key] })
           }
         })
+        if (response.data.data['temporary_url']) {
+          this.imageUrl = response.data.data['temporary_url']
+        }
         this.loading = false
       })
     }
   },
   methods: {
+    handleAvatarSuccess(res, file) {
+      this.form.image = res.data.image
+      this.imageUrl = res.data.temporary_url
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isJPG) {
+        this.$message.error('A imagem tem que ser do formato JPG!')
+      }
+      if (!isLt2M) {
+        this.$message.error('A imagem tem que ter no máximo 2MB!')
+      }
+      return isJPG && isLt2M
+    },
     infoCnpj() {
       if (this.form.cnpj && this.form.cnpj.length >= 14) {
         this.loading_cnpj = true
@@ -516,7 +549,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .el-radio,
 .cert_file {
 	width: 100%;
@@ -524,5 +557,28 @@ export default {
 }
 .el-radio {
 	margin-top: 5px;
+}
+.company-image-uploader .el-upload {
+	border: 1px dashed #d9d9d9;
+	border-radius: 6px;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+}
+.company-image-uploader .el-upload:hover {
+	border-color: #409eff;
+}
+.company-image-uploader-icon {
+	font-size: 28px;
+	color: #8c939d;
+	width: 178px;
+	height: 178px;
+	line-height: 178px;
+	text-align: center;
+}
+.company-image {
+	width: 178px;
+	height: 178px;
+	display: block;
 }
 </style>

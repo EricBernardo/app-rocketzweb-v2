@@ -31,7 +31,7 @@
 				<el-col :md="12" :sm="24">
 					<el-form-item label="CNPJ" prop="cnpj" v-mask="'##.###.###/####-##'">
 						<el-input v-model="form.cnpj" :disabled="loading || loading_cnpj">
-							<el-button :loading="loading_cnpj" slot="append" icon="el-icon-search" @click.prevent="infoCnpj"></el-button>
+							<el-button :loading="loading_cnpj" slot="append" icon="el-icon-search" @click.prevent="infoCnpj" title="Consultar CNPJ"></el-button>
 						</el-input>
 					</el-form-item>
 				</el-col>

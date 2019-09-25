@@ -14,7 +14,7 @@
 					</el-form-item>
 				</el-col>
 				<el-col :md="12" :sm="24">
-					<el-form-item label="Título" prop="title">
+					<el-form-item label="Razão social" prop="title">
 						<el-input v-model="form.title" :disabled="loading"></el-input>
 					</el-form-item>
 				</el-col>

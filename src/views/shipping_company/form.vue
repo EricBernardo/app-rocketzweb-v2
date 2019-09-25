@@ -112,7 +112,7 @@ import { getAllCompany } from '@/api/company'
 export default {
   data() {
     const validCnpjCpf = (rule, value, callback) => {
-      if (this.form.cnpj && this.form.cpf) {
+      if ((this.form.cnpj && this.form.cpf) || (!this.form.cnpj && !this.form.cpf)) {
         callback(new Error('Preencha o campo CPF ou CNPJ'))
       } else {
         callback()
@@ -146,68 +146,58 @@ export default {
           {
             required: true,
             message: 'Campo obrigatório',
-            trigger: 'blur'
           }
         ],
         title: [
           {
             required: true,
             message: 'Campo obrigatório',
-            trigger: 'blur'
           }
         ],
         address: [
           {
             required: true,
             message: 'Campo obrigatório',
-            trigger: 'blur'
           }
         ],
         number: [
           {
             required: true,
             message: 'Campo obrigatório',
-            trigger: 'blur'
           }
         ],
         neighborhood: [
           {
             required: true,
             message: 'Campo obrigatório',
-            trigger: 'blur'
           }
         ],
         state_id: [
           {
             required: true,
             message: 'Campo obrigatório',
-            trigger: 'blur'
           }
         ],
         city_id: [
           {
             required: true,
             message: 'Campo obrigatório',
-            trigger: 'blur'
           }
         ],
         cep: [
           {
             required: true,
             message: 'Campo obrigatório',
-            trigger: 'blur'
           }
         ],
         cpf: [
           {
             validator: validCnpjCpf,
-            trigger: 'blur'
           }
         ],
         cnpj: [
           {
             validator: validCnpjCpf,
-            trigger: 'blur'
           }
         ]
       }

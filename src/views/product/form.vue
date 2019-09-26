@@ -78,6 +78,18 @@
 						</el-select>
 					</el-form-item>
 				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="GTIN (Global Trade Item Number) do produto" prop="cean">
+						<el-input v-model="form.cean" :disabled="loading"></el-input>
+					</el-form-item>
+				</el-col>
+				<el-col :md="12" :sm="24">
+					<el-form-item label="Código NCM" prop="ncm">
+						<el-select filterable v-model="form.ncm" :disabled="loading">
+							<el-option v-for="item in ncm_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
+						</el-select>
+					</el-form-item>
+				</el-col>
 				<el-col :md="24" :sm="24">
 					<el-form-item>
 						<router-link :to="{ name: 'product' }" class="pull-left">
@@ -107,6 +119,12 @@ export default {
       loading: false,
       companies: [],
       categories: [],
+      ncm_list: [
+        {
+          id: '68101900',
+          title: 'Outros'
+        }
+      ],
       pis_list: [
         {
           id: '01',
@@ -473,6 +491,7 @@ export default {
           title: 'Vidro'
         }
       ],
+
       form: {
         product_category_id: null,
         title: null,
@@ -483,7 +502,9 @@ export default {
         icms: '103',
         ipi: '53',
         pis: '07',
-        cofins: '07'
+        cofins: '07',
+        cean: null,
+        ncm: '68101900'
       },
       rules: {
         company_id: [

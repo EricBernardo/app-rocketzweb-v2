@@ -393,15 +393,17 @@ export default {
       this.imageUrl = res.data.temporary_url
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg'
+      const isJPG = file.type === 'image/jpg'
+      const isJPEG = file.type === 'image/jpeg'
+      const isPNG = file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
-      if (!isJPG) {
-        this.$message.error('A imagem tem que ser do formato JPG!')
+      if (!isJPG && !isJPEG && !isPNG) {
+        this.$message.error('A imagem tem que ser do formato JPG, JPEG ou PNG!')
       }
       if (!isLt2M) {
         this.$message.error('A imagem tem que ter no máximo 2MB!')
       }
-      return isJPG && isLt2M
+      return (isJPG || isJPEG || isPNG) && isLt2M
     },
     infoCnpj() {
       if (this.form.cnpj && this.form.cnpj.length >= 14) {

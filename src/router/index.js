@@ -189,7 +189,7 @@ export const constantRoutes = [
     redirect: '/product_category',
     children: [
       {
-        path: 'list',
+        path: '',
         name: 'product_category',
         component: () => import('@/views/product_category/list'),
         meta: { title: 'Categoria', icon: 'category' },
@@ -218,7 +218,7 @@ export const constantRoutes = [
     redirect: '/product',
     children: [
       {
-        path: 'list',
+        path: '',
         name: 'product',
         component: () => import('@/views/product/list'),
         meta: { title: 'Produto', icon: 'product' },
@@ -247,7 +247,7 @@ export const constantRoutes = [
     redirect: '/user',
     children: [
       {
-        path: 'list',
+        path: '',
         name: 'user',
         component: () => import('@/views/user/list'),
         meta: { title: 'Usuário', icon: 'user' },
@@ -276,7 +276,7 @@ export const constantRoutes = [
     redirect: '/order',
     children: [
       {
-        path: 'list',
+        path: '',
         name: 'order',
         component: () => import('@/views/order/list'),
         meta: { title: 'Pedido', icon: 'order' },

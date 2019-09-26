@@ -200,6 +200,7 @@
 </template>
 
 <script>
+import { getProfile } from '@/api/user'
 import { show, save, destroyFile } from '@/api/company'
 import { getToken } from '@/utils/auth'
 import { Message } from 'element-ui'
@@ -207,6 +208,7 @@ import { getStates } from '@/api/state'
 import { getCities } from '@/api/city'
 import { getCEP } from '@/api/cep'
 import { getInfoCnpj } from '@/api/cnpj'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -387,7 +389,18 @@ export default {
       })
     }
   },
+  computed: {
+    ...mapGetters(['profile'])
+  },
   methods: {
+    getProfile() {
+      const __this = this
+      __this.loading = true
+      getProfile().then(response => {
+        __this.$store.dispatch('user/setProfile', response.data.data)
+        __this.loading = false
+      })
+    },
     handleAvatarSuccess(res, file) {
       this.form.image = res.data.image
       this.imageUrl = res.data.temporary_url
@@ -484,6 +497,8 @@ export default {
               if (!this.$route.params.id) {
                 this.fileList = []
                 this.$refs[formName].resetFields()
+              } else {
+                if (this.profile.role == 'administrator') this.getProfile()
               }
             })
             .finally(responde => {

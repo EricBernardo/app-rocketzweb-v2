@@ -72,7 +72,7 @@ export const constantRoutes = [
 
   {
     path: '/company',
-    roles: ['root'],
+    roles: ['root', 'administrator'],
     component: Layout,
     children: [
       {

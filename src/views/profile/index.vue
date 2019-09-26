@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <el-card>
-      <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>      
-        <el-row :gutter="10"> 
+      <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
+        <el-row :gutter="10">
           <el-col :md="12" :sm="24">
             <el-form-item label="Nome" prop="name">
               <el-input :disabled="loading" v-model="form.name"></el-input>
@@ -55,7 +55,8 @@ export default {
         email: null,
         password: null,
         password_confirmation: null,
-        role: null
+        role: null,
+        company: null
       },
       rules: {
         name: [
@@ -94,7 +95,7 @@ export default {
     }
   },
   created() {
-    this.getProfile()    
+    this.getProfile()
   },
   methods: {
     getProfile() {
@@ -119,9 +120,9 @@ export default {
                 message: "Salvo com sucesso",
                 type: "success",
                 duration: 5 * 1000
-              })  
+              })
               __this.form.password = null
-              __this.form.password_confirmation = null            
+              __this.form.password_confirmation = null
             })
             .finally(responde => {
               __this.loading = false

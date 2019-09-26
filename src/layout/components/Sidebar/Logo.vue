@@ -1,5 +1,5 @@
 <template>
-<div class="sidebar-logo-container" :class="{'collapse':collapse}" v-if="profile.role == 'administrator' || profile.role == 'client'">
+<div class="sidebar-logo-container" :class="{'collapse':collapse}" v-if="checkPermission(['administrator', 'client'])">
 	<transition name="sidebarLogoFade">
 		<router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
 			<img v-if="profile.company" :src="(profile.company ? profile.company.temporary_url : null) " class="sidebar-logo">
@@ -16,6 +16,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import checkPermission from '@/utils/permission'
 
 export default {
   computed: {
@@ -27,6 +28,9 @@ export default {
       type: Boolean,
       required: true
     }
+  },
+  methods: {
+    checkPermission
   }
 }
 </script>

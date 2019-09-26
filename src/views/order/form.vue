@@ -24,7 +24,7 @@
 			<el-col :md="6" :sm="24">
 				<el-form-item label="Cliente"
 				              prop="client_id"
-				              v-if="this.profile.role == 'root' || this.profile.role == 'administrator'">
+				              v-if="checkPermission(['root', 'administrator'])">
 					<el-select v-model="form.client_id" :disabled="loading || !this.clients.length" filterable>
 						<el-option v-for="item in clients" :key="item.id" :label="item.title" :value="item.id"></el-option>
 					</el-select>
@@ -307,7 +307,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import checkPermission from '@/utils/permission'
 import { show, save } from '@/api/order'
 import { getAllProducts } from '@/api/product'
 import { getAllClients } from '@/api/client'
@@ -633,25 +633,22 @@ export default {
       ]
     }
   },
-  computed: {
-    ...mapGetters(['profile'])
-  },
   created() {
     const form = this.form
 
-    if (this.profile.role == 'administrator') {
+    if (checkPermission(['administrator'])) {
       getAllClients().then(response => {
         this.clients = response.data.data
       })
     }
 
-    if (this.profile.role == 'root') {
+    if (checkPermission(['root'])) {
       getAllCompany().then(response => {
         this.companies = response.data.data
       })
     }
 
-    if (this.profile.role == 'administrator' || this.profile.role == 'client') {
+    if (checkPermission(['administrator', 'client'])) {
       getAllProducts().then(response => {
         this.products = response.data.data
       })
@@ -663,8 +660,9 @@ export default {
     this.getOrder()
   },
   methods: {
+    checkPermission,
     setClientsCompanies(clear = true) {
-      if (this.profile.role == 'root') {
+      if (checkPermission(['root'])) {
         const __this = this
         if (clear) {
           __this.form.total = 0

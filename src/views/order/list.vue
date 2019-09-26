@@ -5,7 +5,7 @@
 			<el-button type="success" class="pull-right m-b-10" size="mini">Cadastrar</el-button>
 		</router-link>
 		<el-table v-loading="listLoading" :data="list.data" element-loading-text="Carregando..." border>
-			<el-table-column label="Empresa" v-if="profile.role == 'root'">
+			<el-table-column label="Empresa" v-if="checkPermission(['root'])">
 				<template slot-scope="scope">{{ scope.row.client.company ? scope.row.client.company.title : '' }}</template>
 			</el-table-column>
 			<el-table-column label="Cliente">
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import checkPermission from '@/utils/permission'
 import { get, destroy, createInvoice, showProtocol, downloadDanfe } from '@/api/order'
 import axios from 'axios'
 
@@ -75,13 +75,11 @@ export default {
       loading_consult_protocol: false
     }
   },
-  computed: {
-    ...mapGetters(['profile'])
-  },
   created() {
     this.fetchData()
   },
   methods: {
+    checkPermission,
     downloadDanfe(id) {
       this.loading_download_danfe = true
       downloadDanfe(id)

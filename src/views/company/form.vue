@@ -208,7 +208,7 @@ import { getStates } from '@/api/state'
 import { getCities } from '@/api/city'
 import { getCEP } from '@/api/cep'
 import { getInfoCnpj } from '@/api/cnpj'
-import { mapGetters } from 'vuex'
+import checkPermission from '@/utils/permission'
 
 export default {
   data() {
@@ -389,10 +389,8 @@ export default {
       })
     }
   },
-  computed: {
-    ...mapGetters(['profile'])
-  },
   methods: {
+    checkPermission,
     getProfile() {
       const __this = this
       __this.loading = true
@@ -498,7 +496,7 @@ export default {
                 this.fileList = []
                 this.$refs[formName].resetFields()
               } else {
-                if (this.profile.role == 'administrator') this.getProfile()
+                if (checkPermission(['administrator'])) this.getProfile()
               }
             })
             .finally(responde => {

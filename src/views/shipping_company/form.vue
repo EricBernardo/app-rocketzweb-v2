@@ -7,7 +7,7 @@
 					<span>Informações</span>
 				</div>
 				<el-col :md="12" :sm="24">
-					<el-form-item label="Empresa" prop="company_id" v-if="profile.role=='root'">
+					<el-form-item label="Empresa" prop="company_id" v-if="checkPermission(['root'])">
 						<el-select filterable v-model="form.company_id" :disabled="loading">
 							<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
 						</el-select>
@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import checkPermission from '@/utils/permission'
 import { getStates } from '@/api/state'
 import { getCities } from '@/api/city'
 import { getCEP } from '@/api/cep'
@@ -203,14 +203,11 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters(['profile'])
-  },
   created() {
     getStates().then(response => {
       this.states = response.data.data
     })
-    if (this.profile.role === 'root') {
+    if (checkPermission(['root'])) {
       getAllCompany().then(response => {
         this.companies = response.data.data
       })
@@ -229,6 +226,7 @@ export default {
     }
   },
   methods: {
+		checkPermission,
     infoCnpj() {
       if (this.form.cnpj && this.form.cnpj.length >= 14) {
         this.loading_cnpj = true

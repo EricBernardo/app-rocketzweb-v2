@@ -6,7 +6,7 @@
       </router-link>
 
       <el-table v-loading="listLoading" :data="list.data" element-loading-text="Carregando..." border>
-        <el-table-column label="Empresa" v-if="profile.role == 'root'">
+        <el-table-column label="Empresa" v-if="checkPermission(['root'])">
           <template slot-scope="scope">{{ scope.row.company ? scope.row.company.title : '' }}</template>
         </el-table-column>
         <el-table-column label="Título">
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import checkPermission from '@/utils/permission'
 import { get, destroy } from "@/api/shipping_company";
 
 export default {
@@ -50,13 +50,11 @@ export default {
       listLoading: false
     };
   },
-  computed: {
-    ...mapGetters(["profile"])
-  },
   created() {
     this.fetchData();
   },
   methods: {
+    checkPermission,
     fetchData(page = 1) {
       this.listLoading = true;
 

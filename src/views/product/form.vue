@@ -11,7 +11,7 @@
 						<el-select v-model="form.product_category_id" :disabled="loading" filterable>
 							<el-option v-for="item in categories"
 							           :key="item.id"
-							           :label="(profile.role == 'root' ? item.company.title + ' - ' : '') + item.title"
+							           :label="(checkPermission(['root']) ? item.company.title + ' - ' : '') + item.title"
 							           :value="item.id"></el-option>
 						</el-select>
 					</el-form-item>
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import checkPermission from '@/utils/permission'
 import { show, save } from '@/api/product'
 import { getAllProductCategories } from '@/api/product_category'
 
@@ -583,9 +583,6 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters(['profile'])
-  },
   created() {
     getAllProductCategories().then(response => {
       this.categories = response.data.data
@@ -602,6 +599,7 @@ export default {
     }
   },
   methods: {
+    checkPermission,
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

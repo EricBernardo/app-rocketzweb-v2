@@ -1,7 +1,7 @@
 <template>
 <div class="app-container">
 	<el-card>
-		<router-link :to="{ name: 'company.create' }" v-if="profile.role == 'root'">
+		<router-link :to="{ name: 'company.create' }" v-if="checkPermission(['root'])">
 			<el-button type="success" class="pull-right m-b-10" size="mini">Cadastrar</el-button>
 		</router-link>
 
@@ -14,7 +14,7 @@
             <router-link :to="{ name: 'company.edit', params: { id: scope.row.id } }">
               <el-button type="primary" size="mini">Editar</el-button>
             </router-link>
-            <el-button type="danger" size="mini" @click.prevent="destroyData(scope.row.id)"  v-if="profile.role == 'root'">Excluir</el-button>
+            <el-button type="danger" size="mini" @click.prevent="destroyData(scope.row.id)" v-if="checkPermission(['root'])">Excluir</el-button>
           </template>
 			</el-table-column>
 		</el-table>
@@ -28,8 +28,7 @@
 
 <script>
 import { get, destroy } from '@/api/company'
-import { mapGetters } from 'vuex'
-
+import checkPermission from '@/utils/permission'
 export default {
   filters: {
     statusFilter(status) {
@@ -47,13 +46,11 @@ export default {
       listLoading: false
     }
   },
-  computed: {
-    ...mapGetters(['profile'])
-  },
   created() {
     this.fetchData()
   },
   methods: {
+    checkPermission,
     fetchData(page = 1) {
       this.listLoading = true
 

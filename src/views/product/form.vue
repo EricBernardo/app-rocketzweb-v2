@@ -573,6 +573,12 @@ export default {
             required: true,
             message: 'Campo obrigatório'
           }
+        ],
+        ncm: [
+          {
+            required: true,
+            message: 'Campo obrigatório'
+          }
         ]
       }
     }

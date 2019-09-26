@@ -59,6 +59,9 @@ export default {
 			height: 32px;
 			vertical-align: middle;
 			margin-right: 12px;
+			background: #fff;
+			border-radius: 3px;
+			border: 1px solid #fff;
 		}
 
 		& .sidebar-title {

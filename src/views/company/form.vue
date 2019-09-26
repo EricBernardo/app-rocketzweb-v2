@@ -44,7 +44,6 @@
 							<img v-if="imageUrl" :src="imageUrl" class="company-image">
 							<i v-else class="el-icon-plus company-image-uploader-icon"></i>
 						</el-upload>
-
 					</el-form-item>
 				</el-col>
 			</el-card>
@@ -91,14 +90,6 @@
 				<el-col :md="24" :sm="24">
 					<el-form-item label="Complemento" prop="complement">
 						<el-input type="textarea" v-model="form.complement" :disabled="loading" :rows="5"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :md="24" :sm="24">
-					<el-form-item>
-						<router-link to="/shipping_company" class="pull-left">
-							<el-button size="mini">Voltar</el-button>
-						</router-link>
-						<el-button size="mini" :loading="loading" type="primary" class="pull-right" @click="onSubmit('form')">Salvar</el-button>
 					</el-form-item>
 				</el-col>
 			</el-card>

@@ -1,6 +1,9 @@
 <template>
   <div class="app-container">
     <el-card>
+      <div slot="header" class="clearfix">
+        <span>Meu perfil</span>
+      </div>
       <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
         <el-row :gutter="10">
           <el-col :md="12" :sm="24">

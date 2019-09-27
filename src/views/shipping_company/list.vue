@@ -1,11 +1,18 @@
 <template>
   <div class="app-container">
     <el-card>
+      <div slot="header" class="clearfix">
+        <span>Listagem</span>
+      </div>
       <router-link :to="{ name: 'shipping_company.create' }">
         <el-button type="success" class="pull-right m-b-10" size="mini">Cadastrar</el-button>
       </router-link>
-
-      <el-table v-loading="listLoading" :data="list.data" element-loading-text="Carregando..." border>
+      <el-table
+        v-loading="listLoading"
+        :data="list.data"
+        element-loading-text="Carregando..."
+        border
+      >
         <el-table-column label="Empresa" v-if="checkPermission(['root'])">
           <template slot-scope="scope">{{ scope.row.company ? scope.row.company.title : '' }}</template>
         </el-table-column>
@@ -76,7 +83,7 @@ export default {
             this.fetchData();
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   }
 };

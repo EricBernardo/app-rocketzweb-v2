@@ -1,111 +1,150 @@
 <template>
-<div class="app-container">
-	<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
-		<el-row :gutter="10">
-			<el-card>
-				<div slot="header" class="clearfix">
-					<span>Informações</span>
-				</div>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Categoria" prop="product_category_id">
-						<el-select v-model="form.product_category_id" :disabled="loading" filterable>
-							<el-option v-for="item in categories"
-							           :key="item.id"
-							           :label="(checkPermission(['root']) ? item.company.title + ' - ' : '') + item.title"
-							           :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Título" prop="title">
-						<el-input v-model="form.title" :disabled="loading"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Peso (KG)" prop="weigh">
-						<el-input-number v-model="form.weigh" :disabled="loading" controls-position="right"></el-input-number>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Preço" prop="price">
-						<money v-model="form.price" :disabled="loading" class="el-input__inner"></money>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Unidade de medida comercial" prop="ucom">
-						<el-select filterable v-model="form.ucom" :disabled="loading">
-							<el-option v-for="item in ucoms" :key="item.id" :label="item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-			</el-card>
-			<el-card>
-				<div slot="header" class="clearfix">
-					<span>Tributos</span>
-				</div>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="(CFOP) - Código Fiscal de Operações e de Prestações" prop="cfop">
-						<el-select filterable v-model="form.cfop" :disabled="loading">
-							<el-option v-for="item in cfops" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="(ICMS) - Situação tributária" prop="icms">
-						<el-select filterable v-model="form.icms" :disabled="loading">
-							<el-option v-for="item in icms_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="(IPI) - Situação tributária" prop="ipi">
-						<el-select filterable v-model="form.ipi" :disabled="loading">
-							<el-option v-for="item in ipi_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="(PIS) - Situação tributária" prop="pis">
-						<el-select filterable v-model="form.pis" :disabled="loading">
-							<el-option v-for="item in pis_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="(COFINS) - Situação tributária" prop="cofins">
-						<el-select filterable v-model="form.cofins" :disabled="loading">
-							<el-option v-for="item in pis_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="GTIN (Global Trade Item Number) do produto" prop="cean">
-						<el-input v-model="form.cean" :disabled="loading"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
-					<el-form-item label="Código NCM" prop="ncm">
-						<el-select filterable v-model="form.ncm" :disabled="loading">
-							<el-option v-for="item in ncm_list" :key="item.id" :label="item.id + ' - ' + item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="24" :sm="24">
-					<el-form-item>
-						<router-link :to="{ name: 'product' }" class="pull-left">
-							<el-button size="mini">Voltar</el-button>
-						</router-link>
-						<el-button size="mini"
-						           :loading="loading"
-						           type="primary"
-						           class="pull-right"
-						           @click="onSubmit('form')">Salvar</el-button>
-					</el-form-item>
-				</el-col>
-			</el-card>
-		</el-row>
-	</el-form>
-</div>
+  <div class="app-container">
+    <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
+      <el-row :gutter="10">
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>Informações</span>
+          </div>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="Categoria" prop="product_category_id">
+              <el-select v-model="form.product_category_id" :disabled="loading" filterable>
+                <el-option
+                  v-for="item in categories"
+                  :key="item.id"
+                  :label="(checkPermission(['root']) ? item.company.title + ' - ' : '') + item.title"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="Título" prop="title">
+              <el-input v-model="form.title" :disabled="loading"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="Peso (KG)" prop="weigh">
+              <el-input-number v-model="form.weigh" :disabled="loading" controls-position="right"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="Preço" prop="price">
+              <money v-model="form.price" :disabled="loading" class="el-input__inner"></money>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="Unidade de medida comercial" prop="ucom">
+              <el-select filterable v-model="form.ucom" :disabled="loading">
+                <el-option
+                  v-for="item in ucoms"
+                  :key="item.id"
+                  :label="item.title"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-card>
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>Tributos</span>
+          </div>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="(CFOP) - Código Fiscal de Operações e de Prestações" prop="cfop">
+              <el-select filterable v-model="form.cfop" :disabled="loading">
+                <el-option
+                  v-for="item in cfops"
+                  :key="item.id"
+                  :label="item.id + ' - ' + item.title"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="(ICMS) - Situação tributária" prop="icms">
+              <el-select filterable v-model="form.icms" :disabled="loading">
+                <el-option
+                  v-for="item in icms_list"
+                  :key="item.id"
+                  :label="item.id + ' - ' + item.title"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="(IPI) - Situação tributária" prop="ipi">
+              <el-select filterable v-model="form.ipi" :disabled="loading">
+                <el-option
+                  v-for="item in ipi_list"
+                  :key="item.id"
+                  :label="item.id + ' - ' + item.title"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="(PIS) - Situação tributária" prop="pis">
+              <el-select filterable v-model="form.pis" :disabled="loading">
+                <el-option
+                  v-for="item in pis_list"
+                  :key="item.id"
+                  :label="item.id + ' - ' + item.title"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="(COFINS) - Situação tributária" prop="cofins">
+              <el-select filterable v-model="form.cofins" :disabled="loading">
+                <el-option
+                  v-for="item in pis_list"
+                  :key="item.id"
+                  :label="item.id + ' - ' + item.title"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="GTIN (Global Trade Item Number) do produto" prop="cean">
+              <el-input v-model="form.cean" :disabled="loading"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :md="12" :sm="24">
+            <el-form-item label="Código NCM" prop="ncm">
+              <el-select filterable v-model="form.ncm" :disabled="loading">
+                <el-option
+                  v-for="item in ncm_list"
+                  :key="item.id"
+                  :label="item.id + ' - ' + item.title"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :md="24" :sm="24">
+            <el-form-item>
+              <router-link :to="{ name: 'product' }" class="pull-left">
+                <el-button size="mini">Voltar</el-button>
+              </router-link>
+              <el-button
+                size="mini"
+                :loading="loading"
+                type="primary"
+                class="pull-right"
+                @click="onSubmit('form')"
+              >Salvar</el-button>
+            </el-form-item>
+          </el-col>
+        </el-card>
+      </el-row>
+    </el-form>
+  </div>
 </template>
 
 <script>
@@ -503,7 +542,7 @@ export default {
         ipi: '53',
         pis: '07',
         cofins: '07',
-        cean: null,
+        cean: 'SEM GTIN',
         ncm: '68101900'
       },
       rules: {
@@ -626,6 +665,6 @@ export default {
 </script>
 <style>
 .el-card {
-	margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 </style>

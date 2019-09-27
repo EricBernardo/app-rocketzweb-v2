@@ -1,309 +1,346 @@
 <template>
-<div class="app-container">
-	<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
-		<el-card>
-			<div slot="header" class="clearfix">
-				<span>Informações</span>
-			</div>
-			<el-button type="success"
-			           class="pull-right m-b-10"
-			           size="mini"
-			           @click="addProduct()"
-			           :disabled="!this.products.length">Adicionar produto</el-button>
+  <div class="app-container">
+    <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
+      <el-card>
+        <div slot="header" class="clearfix">
+          <span>Informações</span>
+        </div>
+        <el-button
+          type="success"
+          class="pull-right m-b-10"
+          size="mini"
+          @click="addProduct()"
+          :disabled="!this.products.length"
+        >Adicionar produto</el-button>
 
-			<el-col :md="6" :sm="24">
-				<el-form-item label="Empresas" prop="company_id" v-if="companies.length">
-					<el-select v-model="form.company_id"
-					           :disabled="loading"
-					           filterable
-					           @change="setClientsCompanies()">
-						<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="6" :sm="24">
-				<el-form-item label="Cliente"
-				              prop="client_id"
-				              v-if="checkPermission(['root', 'administrator'])">
-					<el-select v-model="form.client_id" :disabled="loading || !this.clients.length" filterable>
-						<el-option v-for="item in clients" :key="item.id" :label="item.title" :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-		</el-card>
-		<el-card>
-			<div slot="header" class="clearfix">
-				<span>Produtos</span>
-			</div>
-			<el-col :span="24">
-				<el-table :data="form.products"
-				          row-key="id"
-				          element-loading-text="Carregando..."
-				          border
-				          width="100%">
-					<el-table-column label="Produto" min-width="150">
-						<template slot-scope="scope">
-								<el-select
-									v-model="scope.row.product_id"
-									@change="calculateProduct(scope.row)"
-									filterable
-									:disabled="scope.row.block"
-								>
-									<el-option
-										v-for="item in products"
-										:key="item.id"
-										:label="(item.title.indexOf(item.category.title) === -1 ? (item.category.title + ' - ') : '') + item.title"
-										:value="item.id"
-									></el-option>
-								</el-select>
-							</template>
-					</el-table-column>
-					<el-table-column label="Quantidade" min-width="150">
-						<template slot-scope="scope">
-								<el-input-number
-									v-model="scope.row.quantity"
-									:change="calculateProduct(scope.row)"
-									:min="1"
-									:max="100"
-									:disabled="scope.row.block"
-								></el-input-number>
-							</template>
-					</el-table-column>
-					<el-table-column label="Preço" min-width="150">
-						<template slot-scope="scope">
-								<money
-									v-model="scope.row.total"
-									:disabled="scope.row.block"
-									:readonly="true"
-									class="el-input__inner"
-								></money>
-							</template>
-					</el-table-column>
-					<el-table-column label="-" width="120" fixed="right">
-						<template slot-scope="scope">
-								<el-button type="danger" size="mini" @click="removeProduct(scope.row)">Remover</el-button>
-							</template>
-					</el-table-column>
-				</el-table>
-			</el-col>
-		</el-card>
-		<el-card>
-			<div slot="header" class="clearfix">
-				<span>Frete</span>
-			</div>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Transportadora" prop="shipping_company_id">
-					<el-select @change="setClientsCompanyVehicles(true)"
-					           v-model="form.shipping_company_id"
-					           :disabled="loading || !this.shipping_companies.length"
-					           filterable>
-						<el-option v-for="item in shipping_companies"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Veículo" prop="shipping_company_vehicle_id">
-					<el-select v-model="form.shipping_company_vehicle_id"
-					           :disabled="loading || !this.shipping_company_vehicles.length"
-					           filterable>
-						<el-option v-for="item in shipping_company_vehicles"
-						           :key="item.id"
-						           :label="item.board"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Valor" prop="freight_value">
-					<el-col :md="20" :sm="24">
-						<money v-model="form.freight_value" :disabled="loading" class="el-input__inner"></money>
-					</el-col>
-				</el-form-item>
-			</el-col>
-		</el-card>
-		<el-card>
-			<div slot="header" class="clearfix">
-				<span>Informações fiscais</span>
-			</div>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Finalidade de emissão da NF-e" prop="finNFe">
-					<el-select v-model="form.finNFe"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in finnfe_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Tipo de Operação" prop="tpNF">
-					<el-select v-model="form.tpNF"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in tpnf_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Indicador de local de destino da operação" prop="idDest">
-					<el-select v-model="form.idDest"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in iddest_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Formato de impressão do DANFE" prop="tpImp">
-					<el-select v-model="form.tpImp"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in tpimp_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Tipo de emissão" prop="tpEmis">
-					<el-select v-model="form.tpEmis"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in tpemis_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Indica operação com consumidor final" prop="indFinal">
-					<el-select v-model="form.indFinal"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in indfinal_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Indicador de presença do comprador no estabelecimento" prop="indPres">
-					<el-select v-model="form.indPres"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in indpres_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Modalidade do frete" prop="modFrete">
-					<el-select v-model="form.modFrete"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in modFrete_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-		</el-card>
-		<el-card>
-			<div slot="header" class="clearfix">
-				<span>Condições de pagamento</span>
-			</div>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Condições de pagamento" prop="indPag">
-					<el-select v-model="form.indPag"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in indPag_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-			<el-col :md="12" :sm="24">
-				<el-form-item label="Forma de Pagamento" prop="tPag">
-					<el-select v-model="form.tPag"
-					           :disabled="loading"
-					           filterable>
-						<el-option v-for="item in tPag_list"
-						           :key="item.id"
-						           :label="item.title"
-						           :value="item.id"></el-option>
-					</el-select>
-				</el-form-item>
-			</el-col>
-		</el-card>
-		<el-card>
-			<div slot="header" class="clearfix">
-				<span>Totais</span>
-			</div>
-			<el-col :md="6" :sm="24">
-				<el-form-item label="Desconto" prop="discount">
-					<el-col :md="20" :sm="24">
-						<money v-model="form.discount" :disabled="loading" class="el-input__inner"></money>
-					</el-col>
-				</el-form-item>
-				<el-form-item label="Pago?" prop="paid">
-					<el-switch v-model="form.paid" :disabled="loading"></el-switch>
-				</el-form-item>
-				<el-form-item label="Data de emissão" prop="date">
-					<el-date-picker :disabled="loading"
-					                format="dd/MM/yyyy"
-					                value-format="yyyy-MM-dd"
-					                v-model="form.date"
-					                type="date"
-					                placeholder="Data de emissão"></el-date-picker>
-				</el-form-item>
-			</el-col>
-			<el-col :md="6" :sm="24" class="pull-right">
-				<el-form-item label="Subtotal" prop="subtotal">
-					<money v-model="form.subtotal" :readonly="true" class="el-input__inner"></money>
-				</el-form-item>
-				<el-form-item label="Total" prop="total">
-					<money v-model="form.total" :readonly="true" class="el-input__inner"></money>
-				</el-form-item>
-			</el-col>
-			<el-col :md="24" :sm="24">
-				<el-form-item label="Observação" prop="observation">
-					<el-input type="textarea" v-model="form.observation" :disabled="loading" :rows="5"></el-input>
-				</el-form-item>
-			</el-col>
-			<el-col :md="24" :sm="24">
-				<el-form-item>
-					<router-link :to="{ name: 'order' }" class="pull-left">
-						<el-button size="mini">Voltar</el-button>
-					</router-link>
-					<el-button size="mini"
-					           :loading="loading"
-					           type="primary"
-					           class="pull-right"
-					           @click="onSubmit('form')">Salvar</el-button>
-				</el-form-item>
-			</el-col>
-		</el-card>
-	</el-form>
-</div>
+        <el-col :md="6" :sm="24">
+          <el-form-item label="Empresas" prop="company_id" v-if="companies.length">
+            <el-select
+              v-model="form.company_id"
+              :disabled="loading"
+              filterable
+              @change="setClientsCompanies()"
+            >
+              <el-option
+                v-for="item in companies"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="6" :sm="24">
+          <el-form-item
+            label="Cliente"
+            prop="client_id"
+            v-if="checkPermission(['root', 'administrator'])"
+          >
+            <el-select
+              v-model="form.client_id"
+              :disabled="loading || !this.clients.length"
+              filterable
+            >
+              <el-option
+                v-for="item in clients"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">
+          <span>Produtos</span>
+        </div>
+        <el-col :span="24">
+          <el-table
+            :data="form.products"
+            row-key="id"
+            element-loading-text="Carregando..."
+            border
+            width="100%"
+          >
+            <el-table-column label="Produto" min-width="150">
+              <template slot-scope="scope">
+                <el-select
+                  v-model="scope.row.product_id"
+                  @change="calculateProduct(scope.row)"
+                  filterable
+                  :disabled="scope.row.block"
+                >
+                  <el-option
+                    v-for="item in products"
+                    :key="item.id"
+                    :label="(item.title.indexOf(item.category.title) === -1 ? (item.category.title + ' - ') : '') + item.title"
+                    :value="item.id"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="Quantidade" min-width="150">
+              <template slot-scope="scope">
+                <el-input-number
+                  v-model="scope.row.quantity"
+                  :change="calculateProduct(scope.row)"
+                  :min="1"
+                  :max="100"
+                  :disabled="scope.row.block"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column label="Preço" min-width="150">
+              <template slot-scope="scope">
+                <money
+                  v-model="scope.row.total"
+                  :disabled="scope.row.block"
+                  :readonly="true"
+                  class="el-input__inner"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column label="-" width="120" fixed="right">
+              <template slot-scope="scope">
+                <el-button type="danger" size="mini" @click="removeProduct(scope.row)">Remover</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">
+          <span>Frete</span>
+        </div>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Transportadora" prop="shipping_company_id">
+            <el-select
+              @change="setClientsCompanyVehicles(true)"
+              v-model="form.shipping_company_id"
+              :disabled="loading || !this.shipping_companies.length"
+              filterable
+            >
+              <el-option
+                v-for="item in shipping_companies"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Veículo" prop="shipping_company_vehicle_id">
+            <el-select
+              v-model="form.shipping_company_vehicle_id"
+              :disabled="loading || !this.shipping_company_vehicles.length"
+              filterable
+            >
+              <el-option
+                v-for="item in shipping_company_vehicles"
+                :key="item.id"
+                :label="item.board"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Valor" prop="freight_value">
+            <el-col :md="20" :sm="24">
+              <money v-model="form.freight_value" :disabled="loading" class="el-input__inner" />
+            </el-col>
+          </el-form-item>
+        </el-col>
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">
+          <span>Informações fiscais</span>
+        </div>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Finalidade de emissão da NF-e" prop="finNFe">
+            <el-select v-model="form.finNFe" :disabled="loading" filterable>
+              <el-option
+                v-for="item in finnfe_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Tipo de Operação" prop="tpNF">
+            <el-select v-model="form.tpNF" :disabled="loading" filterable>
+              <el-option
+                v-for="item in tpnf_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Indicador de local de destino da operação" prop="idDest">
+            <el-select v-model="form.idDest" :disabled="loading" filterable>
+              <el-option
+                v-for="item in iddest_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Formato de impressão do DANFE" prop="tpImp">
+            <el-select v-model="form.tpImp" :disabled="loading" filterable>
+              <el-option
+                v-for="item in tpimp_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Tipo de emissão" prop="tpEmis">
+            <el-select v-model="form.tpEmis" :disabled="loading" filterable>
+              <el-option
+                v-for="item in tpemis_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Indica operação com consumidor final" prop="indFinal">
+            <el-select v-model="form.indFinal" :disabled="loading" filterable>
+              <el-option
+                v-for="item in indfinal_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item
+            label="Indicador de presença do comprador no estabelecimento"
+            prop="indPres"
+          >
+            <el-select v-model="form.indPres" :disabled="loading" filterable>
+              <el-option
+                v-for="item in indpres_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Modalidade do frete" prop="modFrete">
+            <el-select v-model="form.modFrete" :disabled="loading" filterable>
+              <el-option
+                v-for="item in modFrete_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">
+          <span>Condições de pagamento</span>
+        </div>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Condições de pagamento" prop="indPag">
+            <el-select v-model="form.indPag" :disabled="loading" filterable>
+              <el-option
+                v-for="item in indPag_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :md="12" :sm="24">
+          <el-form-item label="Forma de Pagamento" prop="tPag">
+            <el-select v-model="form.tPag" :disabled="loading" filterable>
+              <el-option
+                v-for="item in tPag_list"
+                :key="item.id"
+                :label="item.title"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">
+          <span>Totais</span>
+        </div>
+        <el-col :md="6" :sm="24">
+          <el-form-item label="Desconto" prop="discount">
+            <el-col :md="20" :sm="24">
+              <money v-model="form.discount" :disabled="loading" class="el-input__inner" />
+            </el-col>
+          </el-form-item>
+          <el-form-item label="Pago?" prop="paid">
+            <el-switch v-model="form.paid" :disabled="loading" />
+          </el-form-item>
+          <el-form-item label="Data de emissão" prop="date">
+            <el-date-picker
+              :disabled="loading"
+              format="dd/MM/yyyy"
+              value-format="yyyy-MM-dd"
+              v-model="form.date"
+              type="date"
+              placeholder="Data de emissão"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :md="6" :sm="24" class="pull-right">
+          <el-form-item label="Subtotal" prop="subtotal">
+            <money v-model="form.subtotal" :readonly="true" class="el-input__inner" />
+          </el-form-item>
+          <el-form-item label="Total" prop="total">
+            <money v-model="form.total" :readonly="true" class="el-input__inner" />
+          </el-form-item>
+        </el-col>
+        <el-col :md="24" :sm="24">
+          <el-form-item label="Observação" prop="observation">
+            <el-input v-model="form.observation" type="textarea" :disabled="loading" :rows="5" />
+          </el-form-item>
+        </el-col>
+        <el-col :md="24" :sm="24">
+          <el-form-item>
+            <router-link :to="{ name: 'order' }" class="pull-left">
+              <el-button size="mini">Voltar</el-button>
+            </router-link>
+            <el-button
+              size="mini"
+              :loading="loading"
+              type="primary"
+              class="pull-right"
+              @click="onSubmit('form')"
+            >Salvar</el-button>
+          </el-form-item>
+        </el-col>
+      </el-card>
+    </el-form>
+  </div>
 </template>
 
 <script>
@@ -505,12 +542,12 @@ export default {
         {
           id: 4,
           title:
-						'Contingência DPEC - emissão em contingência com envio da Declaração Prévia de Emissão em Contingência - DPEC'
+            'Contingência DPEC - emissão em contingência com envio da Declaração Prévia de Emissão em Contingência - DPEC'
         },
         {
           id: 5,
           title:
-						'Contingência FS-DA - emissão em contingência com impressão do DANFE em Formulário de Segurança para Impressão de Documento Auxiliar  de Documento Fiscal Eletrônico (FS-DA)'
+            'Contingência FS-DA - emissão em contingência com impressão do DANFE em Formulário de Segurança para Impressão de Documento Auxiliar  de Documento Fiscal Eletrônico (FS-DA)'
         },
         {
           id: 6,
@@ -634,8 +671,6 @@ export default {
     }
   },
   created() {
-    const form = this.form
-
     if (checkPermission(['administrator'])) {
       getAllClients().then(response => {
         this.clients = response.data.data
@@ -754,7 +789,7 @@ export default {
       if (!row.block) {
         let price = 0
         this.products.map(function(value) {
-          if (value.id == row.product_id) {
+          if (value.id === row.product_id) {
             price = value.price
           }
         })
@@ -830,6 +865,6 @@ export default {
 </script>
 <style>
 .el-form-item__content {
-	margin-right: 15px;
+  margin-right: 15px;
 }
 </style>

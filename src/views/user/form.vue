@@ -6,7 +6,8 @@
       </div>
       <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
         <el-row :gutter="10">
-          <el-col :md="12" :sm="24">
+          <pre>{{form}}</pre>
+          <el-col :md="24" :sm="24">
             <el-form-item label="Papel" prop="role" v-if="rolesUser.length">
               <el-select
                 filterable
@@ -23,13 +24,18 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :md="24" :sm="24" v-if="this.form.role == 'administrator' || this.form.role == 'client'">
+            <el-form-item label="Empresas" prop="company">
+              <el-transfer :titles="['Disponíveis', 'Vinculados']" v-model="form.companies" :data="companies" @change="handleChange"></el-transfer>
+            </el-form-item>
+          </el-col>
           <el-col :md="12" :sm="24">            
             <el-form-item label="Cliente" prop="client_id" v-if="this.form.role == 'client'">
               <el-select filterable :disabled="loading || !clients.length" v-model="form.client_id">
                 <el-option
                   v-for="item in clients"
                   :key="item.id"
-                  :label="item.title"
+                  :label="item.company.title + ' - ' + item.title"
                   :value="item.id"
                 ></el-option>
               </el-select>
@@ -80,10 +86,11 @@
 import checkPermission from '@/utils/permission'
 import { getAllClients } from '@/api/client'
 import { show, save } from '@/api/user'
+import { getAllCompany } from '@/api/company'
 
 export default {
   data() {
-    return {
+    return {      
       companies: [],
       clients: [],
       rolesUser: [{ value: 'administrator', label: 'Administrador' }, { value: 'client', label: 'Cliente' }],
@@ -95,7 +102,7 @@ export default {
         password_confirmation: null,
         role: null,
         client_id: null,
-        company_id: null
+        companies: []
       },
       rules: {
         name: [
@@ -136,7 +143,7 @@ export default {
             trigger: 'blur'
           }
         ],
-        company_id: [
+        companies: [
           {
             required: true,
             message: 'Campo obrigatório'
@@ -153,6 +160,15 @@ export default {
   },
   created() {
     if (checkPermission(['root'])) {
+      let __this = this
+      getAllCompany().then(response => {
+        response.data.data.map(function(value){
+          __this.companies.push({
+            key: value.id,
+            label: value.title,
+          })
+        })
+      })
       this.rolesUser.push({ value: 'root', label: 'Root' })      
     }
     if (checkPermission(['root', 'administrator'])) {
@@ -164,14 +180,30 @@ export default {
   },
   methods: {
     checkPermission,
+     handleChange(value, direction, movedKeys) {
+      const __this = this
+      __this.clients = []      
+      if (__this.form.companies.length) {
+        getAllClients({ companies: __this.form.companies }).then(response => {
+          __this.form.client_id = null
+          __this.clients = response.data.data
+        })
+      }
+    },
     getUser() {
       if (this.$route.params.id) {
         this.loading = true
         show(this.$route.params.id).then(response => {
           Object.keys(this.form).forEach(key => {
-            this.form[key] = response.data.data[key]
+            if(key == 'companies') {
+              Object.values(response.data.data[key]).forEach(value => {
+                this.form[key].push(value.id);                              
+              })
+            } else {
+              this.form[key] = response.data.data[key]
+            }
           })
-          getAllClients({ company_id: this.form.company_id }).then(response => {
+          getAllClients().then(response => {
             this.clients = response.data.data
           })
           this.loading = false
@@ -202,3 +234,24 @@ export default {
   }
 }
 </script>
+<style>
+  .el-transfer-panel {
+    width: 40%;
+  }
+  .el-transfer__buttons {
+    padding: 0 7%;
+  }
+  .el-transfer__button:nth-child(2) {
+    margin: 0 auto;
+  }
+  @media only screen and (max-width: 764px) {
+    .el-transfer-panel {
+      width: 100%;
+    }
+    .el-transfer__buttons {
+      padding: 0 50%;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+  }
+</style>

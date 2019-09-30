@@ -13,7 +13,7 @@
           <router-link :to="{ name: 'profile' }">
             <el-dropdown-item>Meu Perfil</el-dropdown-item>
           </router-link>
-          <a @click.prevent="chooseCompany()" v-if="profile.companies.length >= 2">
+          <a @click.prevent="chooseCompany()" v-if="1">
             <el-dropdown-item>Trocar de empresa</el-dropdown-item>            
           </a>
           <el-dropdown-item divided>

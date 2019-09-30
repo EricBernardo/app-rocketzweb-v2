@@ -6,13 +6,16 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <svg-icon icon-class="user"/>
-          <i class="el-icon-caret-bottom" />
+          <i class="el-icon-caret-bottom" />          
           {{profile.name}}
         </div>        
         <el-dropdown-menu slot="dropdown" class="user-dropdown">          
           <router-link :to="{ name: 'profile' }">
             <el-dropdown-item>Meu Perfil</el-dropdown-item>
           </router-link>
+          <a @click.prevent="chooseCompany()" v-if="profile.companies.length >= 2">
+            <el-dropdown-item>Trocar de empresa</el-dropdown-item>            
+          </a>
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">Sair</span>
           </el-dropdown-item>
@@ -46,6 +49,9 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    async chooseCompany() {
+      this.$router.push(`/choose-company?redirect=${this.$route.fullPath}`)
     }
   }
 }

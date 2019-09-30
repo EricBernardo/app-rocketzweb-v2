@@ -13,11 +13,6 @@
         element-loading-text="Carregando..."
         border
       >
-        <el-table-column label="Empresa" v-if="checkPermission(['root'])">
-          <template
-            slot-scope="scope"
-          >{{ scope.row.shipping_company.company ? scope.row.shipping_company.company.title : '' }}</template>
-        </el-table-column>
         <el-table-column label="Transportadora">
           <template slot-scope="scope">{{ scope.row.shipping_company.title }}</template>
         </el-table-column>
@@ -44,7 +39,7 @@
 </template>
 
 <script>
-import checkPermission from '@/utils/permission'
+
 import { get, destroy } from '@/api/shipping_company_vehicle'
 
 export default {
@@ -68,7 +63,6 @@ export default {
     this.fetchData()
   },
   methods: {
-    checkPermission,
     fetchData(page = 1) {
       this.listLoading = true
       var params = { page: page }

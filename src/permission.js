@@ -26,13 +26,16 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      const hasGetUserInfo = store.getters.profile
-      if (hasGetUserInfo) {
+      const hasGetUserInfo = store.getters.profile      
+      if (hasGetUserInfo) {        
         next()
       } else {
         try {
-          // get user info
-          await store.dispatch('user/getProfile')
+
+          if (to.path !== '/choose-company') {
+            // get user info 
+            await store.dispatch('user/getProfile')
+          }
 
           next()
         } catch (error) {

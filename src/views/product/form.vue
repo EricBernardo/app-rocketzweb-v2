@@ -7,18 +7,6 @@
             <span>Informações</span>
           </div>
           <el-col :md="12" :sm="24">
-            <el-form-item label="Categoria" prop="product_category_id">
-              <el-select v-model="form.product_category_id" :disabled="loading" filterable>
-                <el-option
-                  v-for="item in categories"
-                  :key="item.id"
-                  :label="(checkPermission(['root']) ? item.company.title + ' - ' : '') + item.title"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :md="12" :sm="24">
             <el-form-item label="Título" prop="title">
               <el-input v-model="form.title" :disabled="loading"></el-input>
             </el-form-item>
@@ -148,7 +136,7 @@
 </template>
 
 <script>
-import checkPermission from '@/utils/permission'
+
 import { show, save } from '@/api/product'
 import { getAllProductCategories } from '@/api/product_category'
 
@@ -637,8 +625,7 @@ export default {
       })
     }
   },
-  methods: {
-    checkPermission,
+  methods: {    
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

@@ -7,13 +7,6 @@
 					<span>Informações</span>
 				</div>
 				<el-col :md="12" :sm="24">
-					<el-form-item label="Empresa" prop="company_id" v-if="checkPermission(['root'])">
-						<el-select filterable v-model="form.company_id" :disabled="loading">
-							<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
 					<el-form-item label="Razão social/Nome" prop="title">
 						<el-input v-model="form.title" :disabled="loading"></el-input>
 					</el-form-item>
@@ -127,9 +120,7 @@ import { getStates } from '@/api/state'
 import { getCities } from '@/api/city'
 import { getCEP } from '@/api/cep'
 import { show, save } from '@/api/client'
-import { getAllCompany } from '@/api/company'
 import { getInfoCnpj } from '@/api/cnpj'
-import checkPermission from '@/utils/permission'
 
 export default {
   data() {
@@ -252,13 +243,6 @@ export default {
     getStates().then(response => {
       this.states = response.data.data
     })
-
-    if (checkPermission(['root'])) {
-      getAllCompany().then(response => {
-        this.companies = response.data.data
-      })
-    }
-
     if (this.$route.params.id) {
       this.loading = true
       show(this.$route.params.id).then(response => {
@@ -273,7 +257,6 @@ export default {
     }
   },
   methods: {
-    checkPermission,
     infoCnpj() {
       if (this.form.cnpj && this.form.cnpj.length >= 14) {
         this.loading_cnpj = true

@@ -44,6 +44,13 @@ export const constantRoutes = [
   },
 
   {
+    path: '/choose-company',
+    name: 'choose-company',
+    component: () => import('@/views/choose_company/index'),
+    hidden: true
+  },
+
+  {
     path: '/profile',
     component: Layout,
     roles: ['root', 'administrator', 'client'],

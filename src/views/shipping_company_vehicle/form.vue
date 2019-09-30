@@ -7,13 +7,6 @@
 		<el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
 			<el-row :gutter="10">
 				<el-col :md="12" :sm="24">
-					<el-form-item label="Empresa" prop="company_id" v-if="checkPermission(['root'])">
-						<el-select filterable v-model="company_id" @change="setShippingCompany()" :disabled="loading">
-							<el-option v-for="item in companies" :key="item.id" :label="item.title" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :md="12" :sm="24">
 					<el-form-item label="Transportadora" prop="shipping_company_id">
 						<el-select filterable v-model="form.shipping_company_id" :disabled="loading || !this.shipping_companies.length">
 							<el-option v-for="item in shipping_companies"
@@ -50,10 +43,9 @@
 </template>
 
 <script>
-import checkPermission from '@/utils/permission'
+
 import { getStates } from '@/api/state'
 import { show, save } from '@/api/shipping_company_vehicle'
-import { getAllCompany } from '@/api/company'
 import { getAllShippingCompany } from '@/api/shipping_company'
 
 export default {
@@ -95,43 +87,21 @@ export default {
     getStates().then(response => {
       this.states = response.data.data
     })
-    if (checkPermission(['root'])) {
-      getAllCompany().then(response => {
-        this.companies = response.data.data
-      })
-    } else {
-      getAllShippingCompany().then(response => {
-        this.shipping_companies = response.data.data
-      })
-    }
+    getAllShippingCompany().then(response => {
+      this.shipping_companies = response.data.data
+    })    
     if (this.$route.params.id) {
       this.loading = true
       show(this.$route.params.id).then(response => {
         Object.keys(this.form).forEach(key => {
           this.form[key] = response.data.data[key]
         })
-        this.company_id = response.data.data.shipping_company.company.id
-        this.setShippingCompany(false)
+        this.company_id = response.data.data.shipping_company.company.id        
         this.loading = false
       })
     }
   },
   methods: {
-		checkPermission,
-    setShippingCompany(clear = true) {
-      if (checkPermission(['root'])) {
-        const __this = this
-        if (clear) {
-          __this.shipping_companies = []
-          __this.form.shipping_company_id = null
-        }
-        getAllShippingCompany({
-          company_id: __this.company_id
-        }).then(response => {
-          __this.shipping_companies = response.data.data
-        })
-      }
-    },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

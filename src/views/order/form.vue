@@ -12,24 +12,6 @@
           @click="addProduct()"
           :disabled="!this.products.length"
         >Adicionar produto</el-button>
-
-        <el-col :md="6" :sm="24">
-          <el-form-item label="Empresas" prop="company_id" v-if="companies.length">
-            <el-select
-              v-model="form.company_id"
-              :disabled="loading"
-              filterable
-              @change="setClientsCompanies()"
-            >
-              <el-option
-                v-for="item in companies"
-                :key="item.id"
-                :label="item.title"
-                :value="item.id"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
         <el-col :md="6" :sm="24">
           <el-form-item
             label="Cliente"
@@ -348,7 +330,6 @@ import checkPermission from '@/utils/permission'
 import { show, save } from '@/api/order'
 import { getAllProducts } from '@/api/product'
 import { getAllClients } from '@/api/client'
-import { getAllCompany } from '@/api/company'
 import { getAllShippingCompany } from '@/api/shipping_company'
 import { getAllShippingCompanyVehicle } from '@/api/shipping_company_vehicle'
 
@@ -671,19 +652,12 @@ export default {
     }
   },
   created() {
-    if (checkPermission(['administrator'])) {
+    if (checkPermission(['root', 'administrator'])) {
       getAllClients().then(response => {
         this.clients = response.data.data
       })
     }
-
-    if (checkPermission(['root'])) {
-      getAllCompany().then(response => {
-        this.companies = response.data.data
-      })
-    }
-
-    if (checkPermission(['administrator', 'client'])) {
+    if (checkPermission(['root', 'administrator', 'client'])) {
       getAllProducts().then(response => {
         this.products = response.data.data
       })
@@ -691,41 +665,10 @@ export default {
         this.shipping_companies = response.data.data
       })
     }
-
     this.getOrder()
   },
   methods: {
     checkPermission,
-    setClientsCompanies(clear = true) {
-      if (checkPermission(['root'])) {
-        const __this = this
-        if (clear) {
-          __this.form.total = 0
-          __this.form.subtotal = 0
-          __this.form.shipping_company_id = null
-          __this.form.shipping_company_vehicle_id = null
-          __this.form.products = []
-          __this.clients = []
-          __this.products = []
-          __this.shipping_company_vehicles = []
-          __this.shipping_companies = []
-        }
-        getAllClients({ company_id: __this.form.company_id }).then(response => {
-          if (clear) {
-            __this.form.client_id = null
-          }
-          __this.clients = response.data.data
-        })
-        getAllProducts({ company_id: __this.form.company_id }).then(response => {
-          __this.products = response.data.data
-        })
-        getAllShippingCompany({
-          company_id: __this.form.company_id
-        }).then(response => {
-          this.shipping_companies = response.data.data
-        })
-      }
-    },
     setClientsCompanyVehicles(clear = false) {
       this.shipping_company_vehicles = []
       if (clear) {
@@ -776,8 +719,7 @@ export default {
           __this.form.indPres = response.data.data.indPres
           __this.form.indPag = response.data.data.indPag
           __this.form.tPag = response.data.data.tPag
-          __this.form.modFrete = response.data.data.modFrete
-          __this.setClientsCompanies(false)
+          __this.form.modFrete = response.data.data.modFrete          
           __this.setClientsCompanyVehicles()
           __this.loading = false
         })

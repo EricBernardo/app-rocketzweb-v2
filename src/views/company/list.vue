@@ -42,6 +42,7 @@
 <script>
 import { get, destroy } from '@/api/company'
 import checkPermission from '@/utils/permission'
+import { getChooseCompany } from '@/utils/choose-company'
 export default {
   filters: {
     statusFilter(status) {
@@ -66,9 +67,7 @@ export default {
     checkPermission,
     fetchData(page = 1) {
       this.listLoading = true
-
       var params = { page: page }
-
       get(params).then(response => {
         this.list = response.data
         this.listLoading = false

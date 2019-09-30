@@ -13,7 +13,6 @@
                 :disabled="loading"
                 v-model="form.role"
                 placeholder="Select"
-                @change="getAllClients()"
               >
                 <el-option
                   v-for="item in rolesUser"
@@ -24,28 +23,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :md="12" :sm="24">
-            <el-form-item
-              label="Empresa"
-              prop="company_id"
-              v-if="companies.length && (this.form.role == 'administrator' || this.form.role == 'client')"
-            >
-              <el-select
-                filterable
-                :disabled="loading"
-                v-model="form.company_id"
-                @change="getAllClients()"
-              >
-                <el-option
-                  v-for="item in companies"
-                  :key="item.id"
-                  :label="item.title"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :md="12" :sm="24">
+          <el-col :md="12" :sm="24">            
             <el-form-item label="Cliente" prop="client_id" v-if="this.form.role == 'client'">
               <el-select filterable :disabled="loading || !clients.length" v-model="form.client_id">
                 <el-option
@@ -98,8 +76,8 @@
 </template>
 
 <script>
+
 import checkPermission from '@/utils/permission'
-import { getAllCompany } from '@/api/company'
 import { getAllClients } from '@/api/client'
 import { show, save } from '@/api/user'
 
@@ -175,32 +153,17 @@ export default {
   },
   created() {
     if (checkPermission(['root'])) {
-      this.rolesUser.push({ value: 'root', label: 'Root' })
-      getAllCompany().then(response => {
-        this.companies = response.data.data
-      })
+      this.rolesUser.push({ value: 'root', label: 'Root' })      
     }
-
-    if (checkPermission(['administrator'])) {
-      getAllClients().then(response => {
+    if (checkPermission(['root', 'administrator'])) {
+      getAllClients().then(response => {        
         this.clients = response.data.data
       })
     }
-
     this.getUser()
   },
   methods: {
     checkPermission,
-    getAllClients() {
-      const __this = this
-      __this.clients = []
-      if (__this.form.company_id) {
-        getAllClients({ company_id: __this.form.company_id }).then(response => {
-          __this.form.client_id = null
-          __this.clients = response.data.data
-        })
-      }
-    },
     getUser() {
       if (this.$route.params.id) {
         this.loading = true

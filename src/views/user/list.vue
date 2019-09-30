@@ -13,9 +13,6 @@
         element-loading-text="Carregando..."
         border
       >
-        <el-table-column label="Empresa" v-if="checkPermission(['root'])">
-          <template slot-scope="scope">{{ scope.row.company ? scope.row.company.title : '' }}</template>
-        </el-table-column>
         <el-table-column label="Cliente">
           <template slot-scope="scope">{{ scope.row.client ? scope.row.client.title : '' }}</template>
         </el-table-column>
@@ -43,7 +40,7 @@
 </template>
 
 <script>
-import checkPermission from '@/utils/permission'
+
 import { get, destroy } from '@/api/user'
 
 export default {
@@ -66,13 +63,10 @@ export default {
   created() {
     this.fetchData()
   },
-  methods: {
-    checkPermission,
+  methods: {    
     fetchData(page = 1) {
       this.listLoading = true
-
       var params = { page: page }
-
       get(params).then(response => {
         this.list = response.data
         this.listLoading = false

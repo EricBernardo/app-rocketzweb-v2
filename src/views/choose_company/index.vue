@@ -65,7 +65,8 @@ export default {
   },
   methods: {
     setCompany(company_id) {
-      setChooseCompany({company_id: company_id}).then(response => {        
+      this.loading = true
+      setChooseCompany({company_id: company_id}).then(response => {
         this.$store.dispatch("user/setProfile", response.data.data)
         this.$router.push({ path: this.redirect || '/' })
       });

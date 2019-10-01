@@ -13,7 +13,7 @@
           <router-link :to="{ name: 'profile' }">
             <el-dropdown-item>Meu Perfil</el-dropdown-item>
           </router-link>
-          <a @click.prevent="chooseCompany()" v-if="1">
+          <a @click.prevent="chooseCompany()" v-if="profile.companies.length >= 2 || checkPermission(['root'])">
             <el-dropdown-item>Trocar de empresa</el-dropdown-item>            
           </a>
           <el-dropdown-item divided>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+
+import checkPermission from '@/utils/permission'
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
@@ -43,6 +45,7 @@ export default {
     ])
   },
   methods: {
+    checkPermission,
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },

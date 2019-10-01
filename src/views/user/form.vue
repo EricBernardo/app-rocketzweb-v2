@@ -6,7 +6,6 @@
       </div>
       <el-form :model="form" :rules="rules" ref="form" @submit.native.prevent>
         <el-row :gutter="10">
-          <pre>{{form}}</pre>
           <el-col :md="24" :sm="24">
             <el-form-item label="Papel" prop="role" v-if="rolesUser.length">
               <el-select

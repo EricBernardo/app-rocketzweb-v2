@@ -49,7 +49,7 @@
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
               >
-                <img v-if="imageUrl" :src="imageUrl" class="company-image" />
+                <img v-if="form.image_url" :src="form.image_url" class="company-image" />
                 <i v-else class="el-icon-plus company-image-uploader-icon"></i>
               </el-upload>
             </el-form-item>
@@ -269,7 +269,6 @@ import checkPermission from '@/utils/permission'
 export default {
   data() {
     return {
-      imageUrl: null,
       fileList: [],
       token: getToken(),
       base_api: process.env.VUE_APP_BASE_API,
@@ -314,7 +313,8 @@ export default {
         iss: 0,
         phone: null,
         complement: null,
-        image: null
+        image: null,
+        image_url: null
       },
       rules: {
         title: [
@@ -443,9 +443,6 @@ export default {
               this.fileList.push({ name: response.data.data[key] })
             }
           })
-          if (response.data.data['temporary_url']) {
-            this.imageUrl = response.data.data['temporary_url']
-          }
           this.loading = false
         })
       }
@@ -461,7 +458,7 @@ export default {
     },
     handleAvatarSuccess(res, file) {
       this.form.image = res.data.image
-      this.imageUrl = res.data.temporary_url
+      this.form.image_url = res.data.image_url
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpg'

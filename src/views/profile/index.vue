@@ -107,8 +107,7 @@ export default {
       getProfile().then(response => {
         Object.keys(__this.form).forEach(key => {
           __this.form[key] = response.data.data[key]
-        })
-        __this.$store.dispatch("user/setProfile", __this.form)
+        })        
         __this.loading = false
       })
     },
@@ -125,7 +124,8 @@ export default {
                 duration: 5 * 1000
               })
               __this.form.password = null
-              __this.form.password_confirmation = null
+              __this.form.password_confirmation = null              
+              __this.$store.dispatch("user/setProfile", response.data.data)
             })
             .finally(responde => {
               __this.loading = false

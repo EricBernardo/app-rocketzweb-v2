@@ -13,6 +13,11 @@
         element-loading-text="Carregando..."
         border
       >
+        <el-table-column label="Papel">
+          <template slot-scope="scope">
+            {{ scope.row.role == 'root' ? 'Root' : (scope.row.role == 'administrator' ? 'Administrador' : (scope.row.role == 'client' ? 'Cliente' : ''))}}
+          </template>
+        </el-table-column>
         <el-table-column label="Cliente">
           <template slot-scope="scope">{{ scope.row.client ? scope.row.client.title : '' }}</template>
         </el-table-column>

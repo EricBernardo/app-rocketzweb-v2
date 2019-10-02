@@ -34,7 +34,7 @@
                 <el-option
                   v-for="item in clients"
                   :key="item.id"
-                  :label="item.company.title + ' - ' + item.title"
+                  :label="item.title"
                   :value="item.id"
                 ></el-option>
               </el-select>

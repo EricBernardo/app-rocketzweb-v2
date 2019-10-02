@@ -11,7 +11,7 @@
                 <el-option
                   v-for="item in categories"
                   :key="item.id"
-                  :label="(checkPermission(['root']) ? item.company.title + ' - ' : '') + item.title"
+                  :label="item.title"
                   :value="item.id"
                 ></el-option>
               </el-select>

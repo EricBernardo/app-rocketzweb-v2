@@ -158,7 +158,7 @@ export default {
     }
   },
   created() {
-    if (checkPermission(['root'])) {
+    if (checkPermission(['root', 'administrator'])) {
       let __this = this
       getAllCompany().then(response => {
         response.data.data.map(function(value){
@@ -168,12 +168,9 @@ export default {
           })
         })
       })
-      this.rolesUser.push({ value: 'root', label: 'Root' })      
     }
-    if (checkPermission(['root', 'administrator'])) {
-      getAllClients().then(response => {        
-        this.clients = response.data.data
-      })
+    if (checkPermission(['root'])) {
+      this.rolesUser.push({ value: 'root', label: 'Root' })
     }
     this.getUser()
   },
@@ -202,7 +199,7 @@ export default {
               this.form[key] = response.data.data[key]
             }
           })
-          getAllClients().then(response => {
+          getAllClients({companies: this.form.companies}).then(response => {
             this.clients = response.data.data
           })
           this.loading = false

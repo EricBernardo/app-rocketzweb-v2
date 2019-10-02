@@ -142,6 +142,12 @@ div:focus {
   line-height: 0px!important;
 }
 
+.el-table .el-button {
+  min-width: 75px;
+  margin-bottom: 2.5px;
+  margin-top: 2.5px;
+}
+
 @media only screen and (max-width: 600px) {
   .el-message {
     min-width: 80% !important;

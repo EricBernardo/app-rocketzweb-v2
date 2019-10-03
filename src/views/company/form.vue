@@ -173,7 +173,7 @@
             </el-form-item>
           </el-col>
           <el-col :md="24" :sm="24" v-if="form.cert_expiration_date">
-            <p><b><font color="#f0c78a">Certificado válido até: {{ form.cert_expiration_date | moment("DD/MM/YYYY") }}</font></b></p>
+            <p><b><font color="#f0c78a">válido até: {{ form.cert_expiration_date | moment("DD/MM/YYYY") }}</font></b></p>
           </el-col>
         </el-card>
         <el-card>
@@ -648,5 +648,8 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+font {
+  font-size: 14px;
 }
 </style>

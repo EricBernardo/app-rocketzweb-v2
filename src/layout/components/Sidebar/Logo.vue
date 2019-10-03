@@ -2,13 +2,13 @@
 <div class="sidebar-logo-container" :class="{'collapse':collapse}">
 	<transition name="sidebarLogoFade">
 		<router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-			<img v-if="profile.company" :src="(profile.company ? profile.company.image_url : null) " class="sidebar-logo">
+			<img v-if="profile.company && profile.company.image_url" :src="profile.company.image_url" class="sidebar-logo">
 			<h1 v-else
-			    class="sidebar-title">{{ (profile.company ? profile.company.title.substr(0, 14) + (profile.company.title.length ? '...' : null) : null) }} </h1>
+			    class="sidebar-title">{{ profile.company.title.substr(0, 14) + (profile.company.title.length > 14 ? '...' : null) }} </h1>
 		</router-link>
 		<router-link v-else key="expand" class="sidebar-logo-link" to="/">
-			<img v-if="profile.company" :src="(profile.company ? profile.company.image_url : null) " class="sidebar-logo">
-			<h1 class="sidebar-title">{{ (profile.company ? profile.company.title.substr(0, 14) + (profile.company.title.length ? '...' : null) : null) }} </h1>
+			<img v-if="profile.company && profile.company.image_url" :src="profile.company.image_url" class="sidebar-logo">
+			<h1 class="sidebar-title">{{ profile.company.title.substr(0, 14) + (profile.company.title.length > 14 ? '...' : null) }} </h1>
 		</router-link>
 	</transition>
 </div>

@@ -419,6 +419,16 @@ button.el-button.pull-right.el-button--primary.el-button--mini {
   width: 100%!important;
 }
 
+input.v-money.el-input__inner[disabled] {
+    background: #f5f7fa;
+}
+
+.el-card__body {
+    padding: 20px;
+    float: left;
+    width: 100%;
+}
+
 @media only screen and (max-width: 600px) {
   .el-message {
     min-width: 80% !important;

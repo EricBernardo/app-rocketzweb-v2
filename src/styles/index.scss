@@ -148,6 +148,16 @@ div:focus {
   margin-top: 2.5px;
 }
 
+input.v-money.el-input__inner[disabled] {
+    background: #f5f7fa;
+}
+
+.el-card__body {
+    padding: 20px;
+    float: left;
+    width: 100%;
+}
+
 @media only screen and (max-width: 600px) {
   .el-message {
     min-width: 80% !important;

@@ -333,12 +333,6 @@ export default {
             message: 'Campo obrigatório'
           }
         ],
-        ie: [
-          {
-            required: true,
-            message: 'Campo obrigatório'
-          }
-        ],
         crt: [
           {
             required: true,

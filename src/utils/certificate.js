@@ -2,7 +2,7 @@ import store from '@/store'
 
 export default function certFileisValid() {
   
-  const date = store.getters && store.getters.profile.cert_expiration_date
+  const date = store.getters && store.getters.profile.company.cert_expiration_date
 
   if (date) {
     

@@ -22,7 +22,7 @@
         <el-table-column label="Data de emissão">
           <template slot-scope="scope">{{ scope.row.date | moment("DD/MM/YYYY") }}</template>
         </el-table-column>
-        <el-table-column label="Ações fiscais" width="125">
+        <el-table-column label="Ações fiscais" width="125" v-if="certFileisValid()">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="Gerar NFE" placement="left">
               <el-button
@@ -99,6 +99,7 @@
 <script>
 
 import { get, destroy, createInvoice, showProtocol, downloadDanfe } from '@/api/order'
+import certFileisValid from '@/utils/certificate'
 import axios from 'axios'
 
 export default {
@@ -125,6 +126,7 @@ export default {
     this.fetchData()
   },
   methods: {    
+    certFileisValid,
     downloadDanfe(id) {
       this.loading_download_danfe = true
       downloadDanfe(id)

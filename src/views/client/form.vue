@@ -84,8 +84,16 @@
 						<el-input type="textarea" v-model="form.complement" :disabled="loading" :rows="5"></el-input>
 					</el-form-item>
 				</el-col>
+        <el-col :md="24" :sm="24" v-if="!certFileisValid()">
+          <el-form-item>
+            <router-link to="/client" class="pull-left">
+              <el-button size="mini">Voltar</el-button>
+            </router-link>
+            <el-button size="mini" :loading="loading" type="primary" class="pull-right" @click="onSubmit('form')">Salvar</el-button>
+          </el-form-item>
+        </el-col>
 			</el-card>
-			<el-card>
+			<el-card v-if="certFileisValid()">
 				<div slot="header" class="clearfix">
 					<span>Informações fiscais</span>
 				</div>
@@ -121,6 +129,7 @@ import { getCities } from '@/api/city'
 import { getCEP } from '@/api/cep'
 import { show, save } from '@/api/client'
 import { getInfoCnpj } from '@/api/cnpj'
+import certFileisValid from '@/utils/certificate'
 
 export default {
   data() {
@@ -257,6 +266,7 @@ export default {
     }
   },
   methods: {
+    certFileisValid,
     infoCnpj() {
       if (this.form.cnpj && this.form.cnpj.length >= 14) {
         this.loading_cnpj = true

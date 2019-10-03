@@ -136,7 +136,7 @@
           </el-form-item>
         </el-col>
       </el-card>
-      <el-card>
+      <el-card v-if="certFileisValid()">
         <div slot="header" class="clearfix">
           <span>Informações fiscais</span>
         </div>
@@ -327,6 +327,7 @@
 
 <script>
 import checkPermission from '@/utils/permission'
+import certFileisValid from '@/utils/certificate'
 import { show, save } from '@/api/order'
 import { getAllProducts } from '@/api/product'
 import { getAllClients } from '@/api/client'
@@ -668,6 +669,7 @@ export default {
     this.getOrder()
   },
   methods: {
+    certFileisValid,
     checkPermission,
     setClientsCompanyVehicles(clear = false) {
       this.shipping_company_vehicles = []

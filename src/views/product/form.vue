@@ -44,8 +44,22 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :md="24" :sm="24" v-if="!certFileisValid()">
+            <el-form-item>
+              <router-link :to="{ name: 'product' }" class="pull-left">
+                <el-button size="mini">Voltar</el-button>
+              </router-link>
+              <el-button
+                size="mini"
+                :loading="loading"
+                type="primary"
+                class="pull-right"
+                @click="onSubmit('form')"
+              >Salvar</el-button>
+            </el-form-item>
+          </el-col>
         </el-card>
-        <el-card>
+        <el-card v-if="certFileisValid()">
           <div slot="header" class="clearfix">
             <span>Tributos</span>
           </div>
@@ -150,6 +164,7 @@
 
 import { show, save } from '@/api/product'
 import { getAllProductCategories } from '@/api/product_category'
+import certFileisValid from '@/utils/certificate'
 
 export default {
   data() {
@@ -630,7 +645,8 @@ export default {
       })
     }
   },
-  methods: {    
+  methods: {
+    certFileisValid,
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

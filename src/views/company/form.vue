@@ -166,11 +166,14 @@
                 <el-button size="small" type="default" :disabled="loading">Arquivo</el-button>
               </el-upload>
             </el-form-item>
-          </el-col>
+          </el-col>              
           <el-col :md="12" :sm="24">
             <el-form-item label="Senha do arquivo" prop="cert_password">
               <el-input v-model="form.cert_password" :disabled="loading"></el-input>
             </el-form-item>
+          </el-col>
+          <el-col :md="24" :sm="24" v-if="form.cert_expiration_date">
+            <p><b><font color="#f0c78a">Certificado válido até: {{ form.cert_expiration_date | moment("DD/MM/YYYY") }}</font></b></p>
           </el-col>
         </el-card>
         <el-card>
@@ -314,7 +317,8 @@ export default {
         phone: null,
         complement: null,
         image: null,
-        image_url: null
+        image_url: null,
+        cert_expiration_date: null
       },
       rules: {
         title: [
@@ -553,7 +557,7 @@ export default {
                 this.fileList = []
                 this.$refs[formName].resetFields()
               } else {
-                if (checkPermission(['administrator'])) this.getProfile()
+                this.getProfile()
                 this.getCompany()
               }
             })

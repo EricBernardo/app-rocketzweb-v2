@@ -55,7 +55,6 @@ export default {
       states: [],
       companies: [],
       shipping_companies: [],
-      company_id: null,
       form: {
         shipping_company_id: null,
         state_id: null,
@@ -96,7 +95,6 @@ export default {
         Object.keys(this.form).forEach(key => {
           this.form[key] = response.data.data[key]
         })
-        this.company_id = response.data.data.shipping_company.company.id        
         this.loading = false
       })
     }
@@ -114,7 +112,6 @@ export default {
                 duration: 5 * 1000
               })
               if (!this.$route.params.id) {
-                this.company_id = null
                 this.shipping_companies = []
                 this.$refs[formName].resetFields()
               }

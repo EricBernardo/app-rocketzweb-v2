@@ -545,12 +545,6 @@ export default {
         ncm: '68101900'
       },
       rules: {
-        company_id: [
-          {
-            required: true,
-            message: 'Campo obrigatório'
-          }
-        ],
         product_category_id: [
           {
             required: true,

@@ -33,18 +33,10 @@ export default {
   data() {
     return {
       loading: false,
-      companies: [],
       form: {
-        company_id: null,
         title: null
       },
       rules: {
-        company_id: [
-          {
-            required: true,
-            message: 'Campo obrigatório'
-          }
-        ],
         title: [
           {
             required: true,

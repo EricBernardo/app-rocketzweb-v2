@@ -676,7 +676,6 @@ export default {
       }
       if (this.form.shipping_company_id) {
         getAllShippingCompanyVehicle({
-          company_id: this.form.company_id,
           shipping_company_id: this.form.shipping_company_id
         }).then(response => {
           this.shipping_company_vehicles = response.data.data
@@ -700,7 +699,6 @@ export default {
             })
           })
           __this.form.client_id = response.data.data.client.id
-          __this.form.company_id = response.data.data.client.company.id
           __this.form.discount = response.data.data.discount
           __this.form.paid = !!response.data.data.paid
           __this.form.subtotal = response.data.data.subtotal
